@@ -6,11 +6,11 @@
 #   npm run db:reset   # stop + wipe the volume (fresh DB)
 #
 # Connection string (matches .env DATABASE_URL):
-#   postgresql://portfolio:portfolio@localhost:5440/portfolio2026
+#   postgresql://portfolio:portfolio@localhost:5441/portfolio2026
 
 services:
   db:
-    image: postgres:17-alpine
+    image: postgres:16-alpine
     container_name: portfolio2026-db
     restart: unless-stopped
     environment:
@@ -18,8 +18,9 @@ services:
       POSTGRES_PASSWORD: portfolio
       POSTGRES_DB: portfolio2026
     ports:
-      # Host 5440 -> container 5432, to avoid clashing with a system Postgres.
-      - "5440:5432"
+      # Host 5441 -> container 5432. (5440 is taken by the existing hcms-pg
+      # container, 5434 by fillyr-db — so portfolio-2026 gets its own 5441.)
+      - "5441:5432"
     volumes:
       - portfolio2026_pgdata:/var/lib/postgresql/data
     healthcheck:
