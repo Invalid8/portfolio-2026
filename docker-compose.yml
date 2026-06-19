@@ -1,0 +1,32 @@
+# Local, ephemeral Postgres for development only.
+# Never point the app at a production DB from here (see PLAN.md §7).
+#
+#   npm run db:up      # start Postgres in the background
+#   npm run db:down    # stop it (keeps data)
+#   npm run db:reset   # stop + wipe the volume (fresh DB)
+#
+# Connection string (matches .env DATABASE_URL):
+#   postgresql://portfolio:portfolio@localhost:5440/portfolio2026
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: portfolio2026-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: portfolio
+      POSTGRES_DB: portfolio2026
+    ports:
+      # Host 5440 -> container 5432, to avoid clashing with a system Postgres.
+      - "5440:5432"
+    volumes:
+      - portfolio2026_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio2026"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  portfolio2026_pgdata:
