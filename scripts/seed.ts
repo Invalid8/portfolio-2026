@@ -12,7 +12,7 @@ import "dotenv/config";
 import { PostgresDataAdapter } from "@dalgoridim/headless-cms/adapters/postgres";
 import { collections } from "../lib/cms/collections";
 import { defaultSections } from "../lib/cms/sections";
-import { projects, tools } from "../lib/content";
+import { projects, tools, experiences } from "../lib/content";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -46,12 +46,28 @@ async function main() {
       thumbnail: p.thumbnail,
       link: p.link,
       github: p.github ?? "",
+      date: `${p.year}-01`,
       year: Number(p.year),
       order: i,
       tags: p.tags,
     });
   }
   console.log(`✅ ${projects.length} projects`);
+
+  // Experiences: typed rows; sorted by `start` (YYYY-MM) descending at read time.
+  for (const [i, e] of experiences.entries()) {
+    await data.upsert("experiences", e.id, {
+      collection: "experiences",
+      role: e.role,
+      company: e.company,
+      href: e.href ?? "",
+      blurb: e.blurb,
+      start: e.start,
+      end: e.end,
+      order: i,
+    });
+  }
+  console.log(`✅ ${experiences.length} experiences`);
 
   // Tools: typed rows (order is a typed column) keyed by their stable `key`.
   for (const [i, t] of tools.entries()) {

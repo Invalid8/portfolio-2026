@@ -4,8 +4,15 @@ import type { CollectionItem } from "@dalgoridim/headless-cms";
 import { getDataAdapter } from "./server";
 import { defaultSections } from "./sections";
 
-/** Collections rendered as editable item lists (add / remove / drag-reorder). */
-const LIST_COLLECTIONS = ["projects", "tools"] as const;
+/**
+ * Editable item lists and how each sorts: projects/tools by manual `order`,
+ * experiences by `start` date descending (most recent first).
+ */
+const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc" }> = {
+  projects: { field: "order", direction: "asc" },
+  tools: { field: "order", direction: "asc" },
+  experiences: { field: "start", direction: "desc" },
+};
 
 /**
  * Read the ordered item lists for the editable collections, for hydrating
@@ -19,11 +26,11 @@ export async function fetchCollections(): Promise<
   const result: Record<string, CollectionItem[]> = {};
 
   await Promise.all(
-    LIST_COLLECTIONS.map(async (name) => {
+    Object.entries(LIST_COLLECTIONS).map(async ([name, orderBy]) => {
       try {
         const rows = await adapter.fetchCollection<Record<string, unknown>>(
           name,
-          { orderBy: [{ field: "order", direction: "asc" }] },
+          { orderBy: [orderBy] },
         );
         result[name] = rows as CollectionItem[];
       } catch {

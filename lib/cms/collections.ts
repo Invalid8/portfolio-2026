@@ -14,6 +14,8 @@ export const collections: Record<string, CollectionConfig> = {
       thumbnail: "text",
       link: "text",
       github: "text",
+      // `date` is the display date ("YYYY-MM"); `year` kept for back-compat.
+      date: "text",
       year: "int",
       order: "int",
     },
@@ -25,6 +27,19 @@ export const collections: Record<string, CollectionConfig> = {
       category: "text",
       img: "text",
       color: "text",
+      order: "int",
+    },
+  },
+  experiences: {
+    table: "experiences",
+    columns: {
+      role: "text",
+      company: "text",
+      href: "text",
+      blurb: "text",
+      // `start`/`end` are "YYYY-MM" (or "" for present); sorted by `start` desc.
+      start: "text",
+      end: "text",
       order: "int",
     },
   },

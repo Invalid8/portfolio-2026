@@ -6,7 +6,6 @@ import {
   contact,
   stats,
   services,
-  experiences,
   principles,
   projects,
 } from "../content";
@@ -51,17 +50,6 @@ export function defaultSections(): NestedSections {
       services.map((s, i) => [
         String(i),
         doc("services", String(i), { title: s.title, description: s.description }),
-      ]),
-    ),
-    experiences: Object.fromEntries(
-      experiences.map((e) => [
-        e.id,
-        doc("experiences", e.id, {
-          role: e.role,
-          company: e.company,
-          blurb: e.blurb,
-          period: e.period,
-        }),
       ]),
     ),
     principles: Object.fromEntries(

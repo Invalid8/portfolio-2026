@@ -45,7 +45,10 @@ export type Experience = {
   href?: string;
   role: string;
   blurb: string;
-  period: string;
+  /** "YYYY-MM"; the list is sorted by `start` descending. */
+  start: string;
+  /** "YYYY-MM" or "" for present/ongoing. */
+  end: string;
 };
 
 export type Principle = { index: string; title: string; description: string };
@@ -253,7 +256,8 @@ export const experiences: Experience[] = [
     role: "Frontend Developer",
     blurb:
       "Architected and maintained scalable frontend systems with modern frameworks, keeping performance and UX sharp across the platform.",
-    period: "May 2024 - Jan 2025",
+    start: "2024-05",
+    end: "2025-01",
   },
   {
     id: "hynitr",
@@ -261,7 +265,8 @@ export const experiences: Experience[] = [
     role: "Frontend Developer",
     blurb:
       "Built and maintained a scalable React + TypeScript component library, cutting development time across multiple projects.",
-    period: "Feb 2024 - Apr 2024",
+    start: "2024-02",
+    end: "2024-04",
   },
   {
     id: "upwork",
@@ -270,7 +275,8 @@ export const experiences: Experience[] = [
     role: "Frontend Developer",
     blurb:
       "Delivered e-commerce platforms, SPAs, and SEO-focused sites for a diverse range of clients as an independent developer.",
-    period: "2020 - 2023",
+    start: "2020-01",
+    end: "2023-12",
   },
   {
     id: "integrity",
@@ -278,7 +284,8 @@ export const experiences: Experience[] = [
     role: "Frontend Developer",
     blurb:
       "Led development of responsive, cross-browser websites with a focus on clean, seamless user experiences.",
-    period: "2019 - 2020",
+    start: "2019-01",
+    end: "2020-12",
   },
 ];
 

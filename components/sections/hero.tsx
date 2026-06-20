@@ -83,7 +83,7 @@ export function Hero() {
 
       <Reveal delay={360}>
         <div className="mt-24 overflow-hidden mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
-          <div className="marquee-track flex items-center gap-x-12">
+          <div className="marquee-track flex items-center gap-x-18">
             {[...heroStack, ...heroStack].map((t, i) => (
               <span
                 key={`${t.key}-${i}`}

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageUploadField } from "@/components/editable/image-upload-field";
 import { tools as staticTools } from "@/lib/content";
 
 type ToolItem = {
@@ -46,6 +47,7 @@ export function Tools() {
   const [addOpen, setAddOpen] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [img, setImg] = useState("");
 
   function handleDrop(targetId: string) {
     if (!dragId || dragId === targetId) return;
@@ -65,12 +67,13 @@ export function Tools() {
     createItem("tools", {
       name: name.trim(),
       category: category.trim() || "Tool",
-      img: "",
+      img: img.trim(),
       color: "#8b8b90",
       order: items.length,
     });
     setName("");
     setCategory("");
+    setImg("");
     setAddOpen(false);
   }
 
@@ -164,6 +167,7 @@ export function Tools() {
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent>
+          <ImageUploadField value={img} onChange={setImg} variant="banner" />
           <DialogHeader>
             <DialogTitle>Add a tool</DialogTitle>
             <DialogDescription>

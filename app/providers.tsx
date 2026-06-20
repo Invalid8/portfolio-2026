@@ -10,15 +10,14 @@ import {
   type CollectionItem,
 } from "@dalgoridim/headless-cms/client";
 import { GoogleAuthProvider } from "@dalgoridim/headless-cms/auth/google/client";
-import { cloudinaryStorage } from "@dalgoridim/headless-cms/storage/cloudinary";
 import { googleClientId, googleEnabled, adminEmails } from "@/lib/auth";
+import { storage } from "@/lib/storage";
 
 const notify: Notifier = {
   success: (m) => toast.success(m),
   error: (m) => toast.error(m),
 };
 
-const storage = cloudinaryStorage({ folder: "portfolio-2026" });
 
 /**
  * Fallback auth when Google sign-in isn't configured yet: visitors can still
