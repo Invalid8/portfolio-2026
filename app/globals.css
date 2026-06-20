@@ -144,6 +144,47 @@
 }
 
 @layer components {
+  /* Signature backdrop from the reference: a faint mosaic of lighter blocks on a
+     hairline cell grid. Fixed, behind content, softly faded toward the edges. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cg fill='%23ffffff'%3E%3Crect x='70' y='0' width='70' height='70' fill-opacity='0.016'/%3E%3Crect x='210' y='70' width='70' height='70' fill-opacity='0.011'/%3E%3Crect x='0' y='140' width='70' height='70' fill-opacity='0.02'/%3E%3Crect x='350' y='140' width='70' height='70' fill-opacity='0.01'/%3E%3Crect x='140' y='210' width='70' height='70' fill-opacity='0.014'/%3E%3Crect x='420' y='70' width='70' height='70' fill-opacity='0.018'/%3E%3Crect x='280' y='280' width='70' height='70' fill-opacity='0.012'/%3E%3Crect x='490' y='210' width='70' height='70' fill-opacity='0.015'/%3E%3Crect x='70' y='350' width='70' height='70' fill-opacity='0.02'/%3E%3Crect x='350' y='420' width='70' height='70' fill-opacity='0.011'/%3E%3Crect x='210' y='490' width='70' height='70' fill-opacity='0.016'/%3E%3Crect x='0' y='420' width='70' height='70' fill-opacity='0.013'/%3E%3Crect x='490' y='490' width='70' height='70' fill-opacity='0.015'/%3E%3Crect x='420' y='350' width='70' height='70' fill-opacity='0.01'/%3E%3Crect x='140' y='490' width='70' height='70' fill-opacity='0.013'/%3E%3C/g%3E%3C/svg%3E"),
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--hairline) 5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--hairline) 5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size:
+      560px 560px,
+      70px 70px,
+      70px 70px;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 6%,
+      #000 90%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 6%,
+      #000 90%,
+      transparent 100%
+    );
+    opacity: 1;
+  }
+
   /* Full-page film grain overlay. Sits above the bg, below content. */
   .grain::before {
     content: "";
@@ -159,7 +200,9 @@
   [data-reveal] {
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 700ms ease, transform 700ms ease;
+    transition:
+      opacity 700ms ease,
+      transform 700ms ease;
     will-change: opacity, transform;
   }
   [data-reveal][data-shown] {
@@ -183,9 +226,50 @@
   .surface-card {
     @apply rounded-lg border border-hairline bg-surface;
   }
+
+  /* Inline-edit affordance — only visible once edit mode sets these attrs. */
+  .cms-editable {
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition:
+      background-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+  .cms-editable[data-cms-editing] {
+    cursor: text;
+    box-shadow: 0 0 0 1px var(--hairline);
+    background-color: color-mix(in oklab, var(--surface-2) 45%, transparent);
+  }
+  .cms-editable[data-cms-editing]:hover {
+    box-shadow: 0 0 0 1px var(--text-muted);
+  }
+  .cms-editable[data-cms-focused] {
+    box-shadow: 0 0 0 1px var(--lime);
+    background-color: color-mix(in oklab, var(--surface-2) 70%, transparent);
+  }
 }
 
 /* Tone down the script face — it's a flourish, not a paragraph. */
 .font-script {
   font-family: var(--font-script);
+}
+
+/* Auto-scrolling marquee (hero tech strip). Track holds the list twice; sliding
+   by -50% loops seamlessly. Pauses on hover and respects reduced motion. */
+@keyframes marquee-x {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  width: max-content;
+  animation: marquee-x 32s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
 }

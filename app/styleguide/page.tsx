@@ -18,7 +18,8 @@ export default function StyleguidePage() {
           Visual system
         </h1>
         <p className="text-muted-foreground max-w-prose">
-          Locking the dark, editorial, lime-accented look before building sections.
+          Locking the dark, editorial, lime-accented look before building
+          sections.
         </p>
       </header>
 
@@ -31,7 +32,9 @@ export default function StyleguidePage() {
               <div
                 className={`${s.cls} h-16 w-full rounded-md border border-hairline`}
               />
-              <p className="font-mono text-xs text-muted-foreground">{s.name}</p>
+              <p className="font-mono text-xs text-muted-foreground">
+                {s.name}
+              </p>
             </div>
           ))}
         </div>
@@ -41,26 +44,34 @@ export default function StyleguidePage() {
       <section className="space-y-6">
         <p className="eyebrow">02 / type</p>
         <div className="space-y-2">
-          <p className="font-mono text-xs text-muted-foreground">Display — Bricolage Grotesque</p>
+          <p className="font-mono text-xs text-muted-foreground">
+            Display — Bricolage Grotesque
+          </p>
           <p className="font-display text-6xl font-semibold tracking-tight leading-[0.95]">
             Frontend that <span className="text-lime">performs</span>
           </p>
         </div>
         <div className="space-y-2">
-          <p className="font-mono text-xs text-muted-foreground">Body — Geist Sans</p>
+          <p className="font-mono text-xs text-muted-foreground">
+            Body — Geist Sans
+          </p>
           <p className="max-w-prose text-lg leading-relaxed text-muted-foreground">
-            A Nigeria-based frontend developer building accessible, user-friendly
-            web applications with React, Next.js, and TypeScript.
+            A Nigeria-based frontend developer building accessible,
+            user-friendly web applications with React, Next.js, and TypeScript.
           </p>
         </div>
         <div className="space-y-2">
-          <p className="font-mono text-xs text-muted-foreground">Mono — Geist Mono</p>
+          <p className="font-mono text-xs text-muted-foreground">
+            Mono — Geist Mono
+          </p>
           <p className="font-mono text-sm">
             {'const stack = ["react", "next", "typescript"];'}
           </p>
         </div>
         <div className="space-y-2">
-          <p className="font-mono text-xs text-muted-foreground">Script — Allura (signature)</p>
+          <p className="font-mono text-xs text-muted-foreground">
+            Script — Allura (signature)
+          </p>
           <p className="font-script text-6xl text-lime">Daniel Fadamitan</p>
         </div>
       </section>
@@ -69,7 +80,7 @@ export default function StyleguidePage() {
       <section className="space-y-4">
         <p className="eyebrow">03 / actions</p>
         <div className="flex flex-wrap items-center gap-3">
-          <Button className="rounded-full">Let&apos;s talk</Button>
+          <Button className="rounded-full px-4 py-4">Let&apos;s talk</Button>
           <Button variant="outline" className="rounded-full">
             View work
           </Button>

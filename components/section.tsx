@@ -18,7 +18,7 @@ export function Section({
       id={id}
       className={cn(
         "relative z-10 mx-auto w-full px-6 py-20 sm:py-28 scroll-mt-28",
-        width === "wide" ? "max-w-6xl" : "max-w-4xl",
+        width === "wide" ? "max-w-6xl" : "max-w-5xl",
         className,
       )}
     >
@@ -31,7 +31,7 @@ export function Section({
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <p className="eyebrow flex items-center gap-2">
-      <span className="inline-block h-1.5 w-1.5 rounded-full bg-lime" />
+      {/* <span className="inline-block h-1.5 w-1.5 rounded-full bg-lime" /> */}
       {children}
     </p>
   );
@@ -54,7 +54,10 @@ export function SectionHeading({
         className,
       )}
     >
-      {lead} {highlight ? <span className="text-muted-foreground">{highlight}</span> : null}
+      {lead}{" "}
+      {highlight ? (
+        <span className="text-muted-foreground">{highlight}</span>
+      ) : null}
     </h2>
   );
 }

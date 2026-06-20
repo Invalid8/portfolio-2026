@@ -6,8 +6,8 @@ The full build brief lives in @PLAN.md — read it before working. Key locked de
 
 - **Data backend:** Postgres only (headless-cms hybrid adapter). No `DATA_BACKEND` switch, no Firebase-for-data.
 - **Backend:** Next.js App Router API routes (`app/api/admin/...`) via `createCmsHandlers`. No separate server.
-- **Auth:** Firebase admin gate with **both** Google sign-in and Email/Password (credential). `useFirebaseAuth()` exposes `loginWithGoogle()` + `loginWithEmail()`. Server gate requires the Firebase `admin` custom claim **and** membership in `ADMIN_EMAILS`.
-- **CMS package:** `@dalgoridim/headless-cms@^0.2.1` from npm (no tarball/symlink).
+- **Auth:** **Google Identity Services** only — no Firebase. The `auth/google` adapter verifies the Google ID token locally (against Google's public keys, no service account); the server gate grants admin to a verified email in `ADMIN_EMAILS`. Client uses `GoogleAuthProvider` / `useGoogleAuth()` (`auth/google/client`). Total auth env = **one** `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (+ optional `NEXT_PUBLIC_ADMIN_EMAILS` for optimistic client UI). The sign-in dialog (`components/admin-login.tsx`) has **no visible trigger** — summon/dismiss it with **⌘/Ctrl + Shift + .** (period); reopen it while signed in to sign out.
+- **CMS package:** `@dalgoridim/headless-cms@^0.5.0` from npm. `auth/google` adapter (client built on `@react-oauth/google` — render `<GoogleSignInButton />`). **0.5.0** adds editable-collection ops on `usePageContext`: `collections`, `createItem`, `deleteItem`, `reorderItems` (+ `initialCollections` on `PageProvider`) — for add/remove/drag-sort of list items. No tarball/symlink.
 - This is **Next.js 16** — APIs differ from older versions; consult `node_modules/next/dist/docs/` before writing app code (see @AGENTS.md).
 
 ## Local dev

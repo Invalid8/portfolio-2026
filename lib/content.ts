@@ -23,6 +23,7 @@ export type Service = {
 export type Tool = {
   key: string;
   name: string;
+  category: string;
   img: string;
   color: string;
 };
@@ -132,20 +133,48 @@ export const services: Service[] = [
   },
 ];
 
+// ── Skills (3 categorized columns, mirrors the reference layout) ────────────
+export type SkillGroup = { category: string; items: string[] };
+
+export const skillGroups: SkillGroup[] = [
+  {
+    category: "Frontend",
+    items: [
+      "React & Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Design Systems",
+    ],
+  },
+  {
+    category: "Mobile",
+    items: ["React Native", "Flutter", "Expo", "App Store delivery"],
+  },
+  {
+    category: "Engineering",
+    items: [
+      "Performance & Core Web Vitals",
+      "Accessibility (a11y)",
+      "Node.js APIs",
+      "Git & CI/CD",
+    ],
+  },
+];
+
 // ── Tools (curated subset of the skill set, with devicon logos) ─────────────
 export const tools: Tool[] = [
-  { key: "typescript", name: "TypeScript", color: "#3178C6", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-  { key: "react", name: "React", color: "#61DAFB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { key: "nextjs", name: "Next.js", color: "#FFFFFF", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
-  { key: "tailwind", name: "Tailwind CSS", color: "#06B6D4", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
-  { key: "react-native", name: "React Native", color: "#61DAFB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-  { key: "flutter", name: "Flutter", color: "#02569B", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" },
-  { key: "node", name: "Node.js", color: "#339933", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-  { key: "svelte", name: "Svelte", color: "#FF3E00", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" },
-  { key: "graphql", name: "GraphQL", color: "#E535AB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" },
-  { key: "figma", name: "Figma", color: "#F24E1E", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
-  { key: "git", name: "Git", color: "#F05032", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
-  { key: "firebase", name: "Firebase", color: "#FFCA28", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
+  { key: "typescript", name: "TypeScript", category: "Language", color: "#3178C6", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+  { key: "react", name: "React", category: "UI Library", color: "#61DAFB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+  { key: "nextjs", name: "Next.js", category: "Framework", color: "#FFFFFF", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+  { key: "tailwind", name: "Tailwind CSS", category: "Styling", color: "#06B6D4", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
+  { key: "react-native", name: "React Native", category: "Mobile", color: "#61DAFB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+  { key: "flutter", name: "Flutter", category: "Mobile", color: "#02569B", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" },
+  { key: "node", name: "Node.js", category: "Runtime", color: "#339933", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+  { key: "svelte", name: "Svelte", category: "UI Framework", color: "#FF3E00", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg" },
+  { key: "graphql", name: "GraphQL", category: "API", color: "#E535AB", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" },
+  { key: "figma", name: "Figma", category: "Design Tool", color: "#F24E1E", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" },
+  { key: "git", name: "Git", category: "Version Control", color: "#F05032", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" },
+  { key: "firebase", name: "Firebase", category: "Backend", color: "#FFCA28", img: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" },
 ];
 
 // ── Featured projects ───────────────────────────────────────────────────────
@@ -293,6 +322,71 @@ export type Testimonial = {
 
 export type FaqItem = { id: string; question: string; answer: string };
 
-export const testimonials: Testimonial[] = [];
+// PLACEHOLDER copy — replace with real client quotes (editable inline once
+// the section is wired to a collection). Kept realistic so the layout reads true.
+export const testimonials: Testimonial[] = [
+  {
+    id: "t1",
+    quote:
+      "Daniel turned a vague brief into a fast, polished site in days. Clear communication and the details were spot on.",
+    name: "Aisha Bello",
+    role: "Founder, Lumen Studio",
+    rating: 5,
+  },
+  {
+    id: "t2",
+    quote:
+      "The build was accessible, quick, and exactly on spec. He flagged problems early and shipped without drama.",
+    name: "Tunde Okafor",
+    role: "Product Lead, Paystack-adjacent",
+    rating: 5,
+  },
+  {
+    id: "t3",
+    quote:
+      "Rare to find someone who cares this much about both the code and the craft. Our Lighthouse scores jumped.",
+    name: "Maria Santos",
+    role: "Design Director, Northwind",
+    rating: 5,
+  },
+];
 
-export const faqs: FaqItem[] = [];
+// PLACEHOLDER copy — replace with real answers.
+export const faqs: FaqItem[] = [
+  {
+    id: "f1",
+    question: "What kind of projects do you take on?",
+    answer:
+      "Marketing sites, web apps, and design-system work — mostly React/Next.js front-ends where performance and accessibility matter.",
+  },
+  {
+    id: "f2",
+    question: "How do you charge?",
+    answer:
+      "Fixed-price per milestone for defined scopes, or a weekly rate for ongoing work. I'll recommend whichever fits the project after a quick call.",
+  },
+  {
+    id: "f3",
+    question: "What's your typical timeline?",
+    answer:
+      "A focused landing page is about a week; a full multi-page site or app is usually three to six weeks depending on scope.",
+  },
+  {
+    id: "f4",
+    question: "Do you work with existing teams?",
+    answer:
+      "Yes — I drop into existing codebases and design systems regularly, and I'm comfortable pairing with designers and back-end engineers.",
+  },
+  {
+    id: "f5",
+    question: "Will I be able to edit the site myself?",
+    answer:
+      "Absolutely. I build with inline editing so you can update copy and images directly on the live site, no dashboard required.",
+  },
+  {
+    id: "f6",
+    question: "How do we get started?",
+    answer:
+      "Send a short note about what you're building. I'll reply within a day and we'll take it from there.",
+  },
+];

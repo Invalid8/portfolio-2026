@@ -1,5 +1,6 @@
 import { Section, Eyebrow, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
+import { EditableText } from "@/components/editable/editable-text";
 import { principles } from "@/lib/content";
 
 export function Approach() {
@@ -15,12 +16,24 @@ export function Approach() {
           <Reveal key={p.index} delay={i * 100}>
             <div className="surface-card flex h-full flex-col p-7">
               <span className="font-mono text-sm text-lime">{p.index}</span>
-              <h3 className="mt-4 font-display text-xl font-medium tracking-tight">
+              <EditableText
+                as="h3"
+                collection="principles"
+                sectionKey={String(i)}
+                fieldKey="title"
+                className="mt-4 block font-display text-xl font-medium tracking-tight"
+              >
                 {p.title}
-              </h3>
-              <p className="mt-3 leading-relaxed text-muted-foreground">
+              </EditableText>
+              <EditableText
+                as="p"
+                collection="principles"
+                sectionKey={String(i)}
+                fieldKey="description"
+                className="mt-3 block leading-relaxed text-muted-foreground"
+              >
                 {p.description}
-              </p>
+              </EditableText>
             </div>
           </Reveal>
         ))}

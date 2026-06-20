@@ -7,7 +7,7 @@ export function SiteNav() {
     <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
       <nav
         aria-label="Primary"
-        className="grid w-full max-w-5xl grid-cols-[1fr_auto_1fr] items-center gap-4 rounded-full border border-hairline bg-surface/70 py-4 pl-5 pr-4 backdrop-blur-md"
+        className="grid w-full max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 rounded-full border border-hairline bg-surface/70 py-4 pl-5 pr-4 backdrop-blur-md"
       >
         <Link
           href="#home"

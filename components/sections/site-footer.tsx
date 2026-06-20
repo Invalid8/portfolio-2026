@@ -1,93 +1,117 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
+import { EditableText } from "@/components/editable/editable-text";
 import { contact, owner, socials, nav } from "@/lib/content";
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="relative z-10 mt-16 overflow-hidden border-t border-hairline">
-      <div className="mx-auto w-full max-w-5xl px-6 pt-24 pb-10">
-        <Reveal>
-          <p className="eyebrow flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-lime" />
-            contact
-          </p>
-          <h2 className="mt-6 max-w-[14ch] font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl">
-            {contact.title}
-            <span className="text-lime">.</span>
-          </h2>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-            {contact.subtitle}
-          </p>
-        </Reveal>
+    <footer
+      id="contact"
+      className="relative z-10 mt-16 overflow-hidden border-hairline"
+    >
+      <div className="mx-auto w-full max-w-6xl px-6 pt-24 pb-10">
+        <div className="flex flex-col justify-between gap-12 lg:flex-row">
+          {/* Heading + CTA */}
+          <Reveal className="max-w-md">
+            <h2 className="font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-6xl">
+              <EditableText
+                collection="portfolio"
+                sectionKey="contact"
+                fieldKey="title"
+              >
+                {contact.title}
+              </EditableText>
+            </h2>
+            <EditableText
+              as="p"
+              collection="portfolio"
+              sectionKey="contact"
+              fieldKey="subtitle"
+              className="mt-6 block text-lg leading-relaxed text-muted-foreground"
+            >
+              {contact.subtitle}
+            </EditableText>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Button asChild size="lg" className="rounded-full px-5">
+                <Link href={`mailto:${owner.email}`}>
+                  <Mail className="size-4" /> Start a project
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-full px-5"
+              >
+                <Link
+                  href={owner.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Resume <ArrowUpRight className="size-4" />
+                </Link>
+              </Button>
+            </div>
+          </Reveal>
 
-        <Reveal delay={120}>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Button asChild size="lg" className="rounded-full">
-              <Link href={`mailto:${owner.email}`}>
-                <Mail className="size-4" /> {owner.email}
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full">
-              <Link href={owner.resume} target="_blank" rel="noopener noreferrer">
-                Resume <ArrowUpRight className="size-4" />
-              </Link>
-            </Button>
-          </div>
-        </Reveal>
+          {/* Link columns */}
+          <Reveal delay={120}>
+            <div className="grid grid-cols-2 gap-x-16 gap-y-8 sm:gap-x-24">
+              <div>
+                <p className="eyebrow">useful links</p>
+                <nav aria-label="Footer" className="mt-5 flex flex-col gap-3">
+                  {nav.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+              <div>
+                <p className="eyebrow">follow me</p>
+                <div className="mt-5 flex flex-col gap-3">
+                  {socials.map((s) => (
+                    <Link
+                      key={s.name}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {s.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+        </div>
 
+        {/* Signature wordmark watermark — huge, full-bleed script flourish. */}
         <Reveal delay={200}>
-          <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin className="size-3.5" /> {owner.location}
-            </span>
-            <span>{owner.phone}</span>
-          </div>
-        </Reveal>
-
-        {/* Signature wordmark watermark */}
-        <Reveal delay={280}>
           <p
             aria-hidden="true"
-            className="pointer-events-none mt-16 select-none font-script text-7xl leading-none text-foreground/10 sm:text-[10rem]"
+            className="pointer-events-none mt-16 -ml-45 xl:-ml-70 -mb-2 w-full select-none whitespace-nowrap text-center font-script leading-[0.8] text-foreground/[0.07]"
+            style={{ fontSize: "clamp(4.5rem, 19vw, 16rem)" }}
           >
             {owner.name}
           </p>
         </Reveal>
 
-        <div className="mt-12 flex flex-col gap-6 border-t border-hairline pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-4">
-            {socials.map((s) => (
-              <Link
-                key={s.name}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.name}
-                className="font-mono text-xs text-muted-foreground transition-colors hover:text-lime"
-              >
-                {s.label}
-              </Link>
-            ))}
-          </div>
+        <div className="mt-8 flex flex-col justify-center gap-3 border-hairline pt-8 font-mono text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:justify-betweend">
+          <span>
+            © {new Date().getFullYear()} {owner.name}. All rights reserved.
+          </span>
+          {/* <span className="inline-flex items-center gap-1.5">
+            <MapPin className="size-3.5" /> {owner.location}
+          </span> */}
         </div>
-
-        <p className="mt-8 font-mono text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} {owner.name}. Built with Next.js.
-        </p>
       </div>
     </footer>
   );
