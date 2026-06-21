@@ -4,12 +4,12 @@ import { createAdminGate } from "@dalgoridim/headless-cms/server";
 import { PostgresDataAdapter } from "@dalgoridim/headless-cms/adapters/postgres";
 import { googleAuth } from "@dalgoridim/headless-cms/auth/google";
 import { cloudinarySign } from "@dalgoridim/headless-cms/storage/cloudinary/server";
-import { collections } from "./collections";
+import { schema } from "@/lib/db/schema";
 
 /**
- * One data backend, chosen once: Postgres (hybrid adapter). `projects` is a
- * registered typed table so `year`/`order` sort numerically; everything else
- * (the `portfolio` section docs) lives in the shared JSONB `documents` table.
+ * One data backend: Postgres via the Drizzle-backed adapter. Every collection is
+ * a typed table declared in `lib/db/schema.ts`; the adapter does DML only and
+ * Drizzle Kit owns the DDL/migrations (one shared `schema`).
  */
 let _data: DataAdapter | null = null;
 
@@ -17,7 +17,7 @@ export function getDataAdapter(): DataAdapter {
   if (_data) return _data;
   _data = new PostgresDataAdapter({
     connectionString: process.env.DATABASE_URL,
-    collections,
+    schema,
   });
   return _data;
 }

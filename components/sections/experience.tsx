@@ -60,9 +60,9 @@ function toForm(e?: ExpItem): FormState {
 
 export function Experience() {
   const { isAdmin, isEditing } = useCmsAuth();
-  const { collections, createItem, updateItem, deleteItem } = usePageContext();
+  const { items: cmsItems, createItem, updateItem, deleteItem } = usePageContext();
 
-  const live = (collections.experiences as ExpItem[] | undefined) ?? [];
+  const live = (cmsItems.experiences as ExpItem[] | undefined) ?? [];
   const source = live.length ? live : fallback;
   // Always sorted by start date, most recent first.
   const items = [...source].sort((a, b) =>

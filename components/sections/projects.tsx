@@ -79,10 +79,10 @@ function toForm(p?: ProjectItem): FormState {
 
 export function Projects() {
   const { isAdmin, isEditing } = useCmsAuth();
-  const { collections, createItem, updateItem, deleteItem, reorderItems } =
+  const { items: cmsItems, createItem, updateItem, deleteItem, reorderItems } =
     usePageContext();
 
-  const live = (collections.projects as ProjectItem[] | undefined) ?? [];
+  const live = (cmsItems.projects as ProjectItem[] | undefined) ?? [];
   const items = live.length ? live : fallback;
   const canEdit = isAdmin && isEditing && live.length > 0;
 

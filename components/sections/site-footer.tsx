@@ -97,7 +97,7 @@ export function SiteFooter() {
         <Reveal delay={200}>
           <p
             aria-hidden="true"
-            className="pointer-events-none mt-16 -ml-45 xl:-ml-70 -mb-2 w-full select-none whitespace-nowrap text-center font-script leading-[0.8] text-foreground/[0.07]"
+            className="pointer-events-none mt-16 -ml-45 xl:-ml-75 -mb-2 w-full select-none whitespace-nowrap text-center font-script leading-[0.8] text-foreground/[0.07]"
             style={{ fontSize: "clamp(4.5rem, 19vw, 16rem)" }}
           >
             {owner.name}
@@ -108,9 +108,6 @@ export function SiteFooter() {
           <span>
             © {new Date().getFullYear()} {owner.name}. All rights reserved.
           </span>
-          {/* <span className="inline-flex items-center gap-1.5">
-            <MapPin className="size-3.5" /> {owner.location}
-          </span> */}
         </div>
       </div>
     </footer>

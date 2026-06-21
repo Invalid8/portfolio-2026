@@ -6,8 +6,7 @@ import {
   PageProvider,
   CmsAuthProvider,
   type Notifier,
-  type NestedSections,
-  type CollectionItem,
+  type ItemMap,
 } from "@dalgoridim/headless-cms/client";
 import { GoogleAuthProvider } from "@dalgoridim/headless-cms/auth/google/client";
 import { googleClientId, googleEnabled, adminEmails } from "@/lib/auth";
@@ -38,17 +37,14 @@ function LocalEditProvider({ children }: { children: ReactNode }) {
 
 export function Providers({
   children,
-  initialSections,
-  initialCollections,
+  initialItems,
 }: {
   children: ReactNode;
-  initialSections?: NestedSections;
-  initialCollections?: Record<string, CollectionItem[]>;
+  initialItems?: ItemMap;
 }) {
   const page = (
     <PageProvider
-      initialSections={initialSections}
-      initialCollections={initialCollections}
+      initialItems={initialItems}
       apiBasePath="/api/admin"
       storage={storage}
       notify={notify}

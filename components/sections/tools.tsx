@@ -35,10 +35,10 @@ const fallback: ToolItem[] = staticTools.map((t) => ({
 
 export function Tools() {
   const { isAdmin, isEditing } = useCmsAuth();
-  const { collections, createItem, deleteItem, reorderItems } =
+  const { items: cmsItems, createItem, deleteItem, reorderItems } =
     usePageContext();
 
-  const live = (collections.tools as ToolItem[] | undefined) ?? [];
+  const live = (cmsItems.tools as ToolItem[] | undefined) ?? [];
   const items = live.length ? live : fallback;
   // Editing requires seeded rows (so we never overwrite the static fallback).
   const canEdit = isAdmin && isEditing && live.length > 0;

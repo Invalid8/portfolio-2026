@@ -32,8 +32,7 @@ export function EditableImage({
   return (
     <HeadlessEditableImage
       collection={collection}
-      docId={docId}
-      sectionKey={docId}
+      itemId={docId}
       fieldKey={fieldKey}
       src={src}
       className={cn("relative block size-full", className)}

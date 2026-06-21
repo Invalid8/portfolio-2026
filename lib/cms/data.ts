@@ -1,12 +1,11 @@
 import "server-only";
-import type { NestedSections, Section } from "@dalgoridim/headless-cms/server";
-import type { CollectionItem } from "@dalgoridim/headless-cms";
+import type { Item, ItemMap } from "@dalgoridim/headless-cms/server";
 import { getDataAdapter } from "./server";
-import { defaultSections } from "./sections";
+import { defaultItems } from "./sections";
 
 /**
- * Editable item lists and how each sorts: projects/tools by manual `order`,
- * experiences by `start` date descending (most recent first).
+ * Editable list collections and how each sorts: projects/tools by manual
+ * `order`, experiences by `start` date descending (most recent first).
  */
 const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc" }> = {
   projects: { field: "order", direction: "asc" },
@@ -15,52 +14,29 @@ const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc
 };
 
 /**
- * Read the ordered item lists for the editable collections, for hydrating
- * `PageProvider`'s `initialCollections`. A collection with no rows (un-seeded
- * DB) comes back empty so the component can fall back to its static content.
+ * Read every editable collection from Postgres into one `ItemMap` for hydrating
+ * `PageProvider`'s `initialItems`.
+ *
+ * - **Section collections** (portfolio/stats/principles): DB rows merged over the
+ *   defaults (keyed by id), so the page always has a complete set of fields to
+ *   render and edit even before the DB is seeded / if it's unreachable.
+ * - **List collections** (projects/tools/experiences): DB-driven and sorted; an
+ *   empty (un-seeded) collection comes back `[]` so the component can fall back
+ *   to its static content.
  */
-export async function fetchCollections(): Promise<
-  Record<string, CollectionItem[]>
-> {
+export async function fetchItems(): Promise<ItemMap> {
   const adapter = getDataAdapter();
-  const result: Record<string, CollectionItem[]> = {};
+  const defaults = defaultItems();
+  const result: ItemMap = {};
 
-  await Promise.all(
-    Object.entries(LIST_COLLECTIONS).map(async ([name, orderBy]) => {
-      try {
-        const rows = await adapter.fetchCollection<Record<string, unknown>>(
-          name,
-          { orderBy: [orderBy] },
-        );
-        result[name] = rows as CollectionItem[];
-      } catch {
-        result[name] = [];
-      }
-    }),
-  );
-
-  return result;
-}
-
-/**
- * Read every editable collection from Postgres and merge over the defaults, so
- * the page always has a complete set of fields to render and hydrate from. If a
- * collection's table doesn't exist yet (un-seeded) or the DB is unreachable, we
- * silently fall back to that collection's defaults.
- */
-export async function fetchSections(): Promise<NestedSections> {
-  const defaults = defaultSections();
-  const adapter = getDataAdapter();
-  const result: NestedSections = {};
-
-  await Promise.all(
-    Object.keys(defaults).map(async (collection) => {
-      const base = { ...defaults[collection] };
+  await Promise.all([
+    ...Object.entries(defaults).map(async ([collection, items]) => {
+      const byId = new Map<string, Item>(items.map((it) => [it.id, { ...it }]));
       try {
         const rows = await adapter.fetchCollection<Record<string, unknown>>(collection);
         for (const row of rows) {
-          const key = String(row.id);
-          base[key] = { ...(base[key] ?? {}), ...row, collection } as Section;
+          const id = String(row.id);
+          byId.set(id, { ...(byId.get(id) ?? { id }), ...row, id });
         }
       } catch (err) {
         console.warn(
@@ -68,9 +44,19 @@ export async function fetchSections(): Promise<NestedSections> {
           (err as Error).message,
         );
       }
-      result[collection] = base;
+      result[collection] = [...byId.values()];
     }),
-  );
+    ...Object.entries(LIST_COLLECTIONS).map(async ([collection, orderBy]) => {
+      try {
+        result[collection] = (await adapter.fetchCollection<Record<string, unknown>>(
+          collection,
+          { orderBy: [orderBy] },
+        )) as Item[];
+      } catch {
+        result[collection] = [];
+      }
+    }),
+  ]);
 
   return result;
 }

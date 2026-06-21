@@ -1,17 +1,17 @@
 /**
  * Seed the local Postgres with the owner's content.
  *
- *   npm run db:up && npm run seed
+ *   npm run db:up && npm run db:setup   (migrate + seed)
  *
- * Idempotent (upserts), so re-running is safe. Writes:
- *   - portfolio/{hero,about,contact} + stats/services/experiences/principles
- *     (editable copy) → JSONB `documents` table
- *   - projects/* (full typed rows incl. year/order/tags) → typed `projects` table
+ * Idempotent (upserts), so re-running is safe. Schema (DDL) is owned by Drizzle
+ * Kit — run `npm run db:migrate` first. This script only writes data:
+ *   - portfolio/{hero,about,contact} + stats + principles (editable copy)
+ *   - projects / experiences / tools (full typed rows incl. order/tags)
  */
 import "dotenv/config";
 import { PostgresDataAdapter } from "@dalgoridim/headless-cms/adapters/postgres";
-import { collections } from "../lib/cms/collections";
-import { defaultSections } from "../lib/cms/sections";
+import { schema } from "../lib/db/schema";
+import { defaultItems } from "../lib/cms/sections";
 import { projects, tools, experiences } from "../lib/content";
 
 const connectionString = process.env.DATABASE_URL;
@@ -20,27 +20,22 @@ if (!connectionString) {
   process.exit(1);
 }
 
-const data = new PostgresDataAdapter({ connectionString, collections });
+const data = new PostgresDataAdapter({ connectionString, schema });
 
 async function main() {
   console.log("🚀 Seeding Postgres…\n");
-  await data.migrate();
 
-  // Editable copy for every collection except projects (handled below with
-  // full typed fields).
-  const sections = defaultSections();
-  for (const [collection, docs] of Object.entries(sections)) {
-    if (collection === "projects") continue;
-    for (const [id, doc] of Object.entries(docs)) {
-      await data.upsert(collection, id, doc);
+  // Editable section copy (portfolio, stats, principles).
+  for (const [collection, items] of Object.entries(defaultItems())) {
+    for (const item of items) {
+      await data.upsert(collection, item.id, item);
     }
-    console.log(`✅ ${Object.keys(docs).length} ${collection}`);
+    console.log(`✅ ${items.length} ${collection}`);
   }
 
-  // Projects: full typed rows (year/order are typed columns; tags → extra).
+  // Projects: full typed rows (year/order numeric columns; tags a text[] column).
   for (const [i, p] of projects.entries()) {
     await data.upsert("projects", p.id, {
-      collection: "projects",
       title: p.title,
       description: p.description,
       thumbnail: p.thumbnail,
@@ -57,7 +52,6 @@ async function main() {
   // Experiences: typed rows; sorted by `start` (YYYY-MM) descending at read time.
   for (const [i, e] of experiences.entries()) {
     await data.upsert("experiences", e.id, {
-      collection: "experiences",
       role: e.role,
       company: e.company,
       href: e.href ?? "",
@@ -69,10 +63,9 @@ async function main() {
   }
   console.log(`✅ ${experiences.length} experiences`);
 
-  // Tools: typed rows (order is a typed column) keyed by their stable `key`.
+  // Tools: typed rows (order numeric column) keyed by their stable `key`.
   for (const [i, t] of tools.entries()) {
     await data.upsert("tools", t.key, {
-      collection: "tools",
       name: t.name,
       category: t.category,
       img: t.img,

@@ -1,77 +1,41 @@
-import type { NestedSections, Section } from "@dalgoridim/headless-cms/server";
+import type { Item, ItemMap } from "@dalgoridim/headless-cms/server";
 // Relative (not "@/…") so the tsx seed script can load this without path-alias resolution.
-import {
-  hero,
-  about,
-  contact,
-  stats,
-  services,
-  principles,
-  projects,
-} from "../content";
+import { hero, about, contact, stats, principles } from "../content";
 
 /**
- * The editable content model: which collections/docs/fields are CMS-backed.
- * Shared by the server reads (`data.ts`) and the seed (`scripts/seed.ts`) so
- * there's one source of truth. Structural data (ids, logos, links, tags) stays
- * in `lib/content.ts`; only the *copy* here is editable.
+ * Default editable copy for the "section" collections — singletons and small
+ * fixed lists whose *text* is CMS-backed. Structural data (ids, logos, links,
+ * tags) stays in `lib/content.ts`; only the copy here is editable.
+ *
+ * One model: each collection is a list of items, each with a stable `id` (the
+ * old "section key"). Shared by the server reads (`data.ts`) and the seed
+ * (`scripts/seed.ts`) so there's one source of truth.
+ *
+ * The list collections — projects, tools, experiences — are NOT here: they are
+ * DB-driven and fall back to `lib/content.ts` in their components when un-seeded.
  */
-function doc(collection: string, id: string, fields: Record<string, unknown>): Section {
-  return { id, collection, ...fields };
-}
+const doc = (id: string, fields: Record<string, unknown>): Item => ({ id, ...fields });
 
-export function defaultSections(): NestedSections {
+export function defaultItems(): ItemMap {
   return {
-    // Singletons
-    portfolio: {
-      hero: doc("portfolio", "hero", {
+    // Singletons (one item each, addressed by a stable id).
+    portfolio: [
+      doc("hero", {
         headlineLead: hero.headlineLead,
         headlineAccent: hero.headlineAccent,
         headlineTail: hero.headlineTail,
         subtitle: hero.subtitle,
       }),
-      about: doc("portfolio", "about", {
-        leading: about.leading,
-        trailing: about.trailing,
-      }),
-      contact: doc("portfolio", "contact", {
-        title: contact.title,
-        subtitle: contact.subtitle,
-      }),
-    },
-    // Lists (doc id = stable per item; component maps over lib/content order)
-    stats: Object.fromEntries(
-      stats.map((s, i) => [
-        String(i),
-        doc("stats", String(i), { value: s.value, label: s.label }),
-      ]),
-    ),
-    services: Object.fromEntries(
-      services.map((s, i) => [
-        String(i),
-        doc("services", String(i), { title: s.title, description: s.description }),
-      ]),
-    ),
-    principles: Object.fromEntries(
-      principles.map((p, i) => [
-        String(i),
-        doc("principles", String(i), { title: p.title, description: p.description }),
-      ]),
-    ),
-    // Typed collection — only the editable text/image fields live in the section
-    // model; link/github/year/tags stay structural in lib/content.ts.
-    projects: Object.fromEntries(
-      projects.map((p) => [
-        p.id,
-        doc("projects", p.id, {
-          title: p.title,
-          description: p.description,
-          thumbnail: p.thumbnail,
-        }),
-      ]),
+      doc("about", { leading: about.leading, trailing: about.trailing }),
+      doc("contact", { title: contact.title, subtitle: contact.subtitle }),
+    ],
+    // Small fixed lists (item id = index; components map over lib/content order).
+    stats: stats.map((s, i) => doc(String(i), { value: s.value, label: s.label })),
+    principles: principles.map((p, i) =>
+      doc(String(i), { title: p.title, description: p.description }),
     ),
   };
 }
 
-/** Collections that hold editable section docs (loaded by `fetchSections`). */
-export const EDITABLE_COLLECTIONS = Object.keys(defaultSections());
+/** Collections that hold editable section docs (loaded with defaults by `data.ts`). */
+export const SECTION_COLLECTIONS = Object.keys(defaultItems());

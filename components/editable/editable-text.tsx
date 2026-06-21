@@ -27,7 +27,7 @@ export function EditableText({
   return (
     <ContentEditSpan
       collection={collection}
-      sectionKey={sectionKey}
+      itemId={sectionKey}
       fieldKey={fieldKey}
       as={as}
       className={cn("cms-editable", className)}
