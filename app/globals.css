@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "@uiw/react-md-editor/markdown-editor.css";
+@import "@uiw/react-markdown-preview/markdown.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -253,6 +255,56 @@
 .font-script {
   font-family: var(--font-script);
 }
+
+.feed-prose {
+  color: var(--text-muted);
+  font-size: 1.075rem;
+  line-height: 1.85;
+}
+.feed-prose > * + * { margin-top: 1.4em; }
+.feed-prose h1,
+.feed-prose h2,
+.feed-prose h3 {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 550;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.feed-prose h1 { font-size: 2.5rem; }
+.feed-prose h2 { margin-top: 2em; font-size: 2rem; }
+.feed-prose h3 { margin-top: 1.75em; font-size: 1.45rem; }
+.feed-prose a { color: var(--lime); text-decoration: underline; text-underline-offset: 4px; }
+.feed-prose strong { color: var(--text); font-weight: 600; }
+.feed-prose ul,
+.feed-prose ol { padding-left: 1.5rem; }
+.feed-prose ul { list-style: disc; }
+.feed-prose ol { list-style: decimal; }
+.feed-prose li + li { margin-top: 0.45rem; }
+.feed-prose blockquote {
+  border-left: 3px solid var(--lime);
+  color: var(--text);
+  padding-left: 1.25rem;
+}
+.feed-prose :not(pre) > code {
+  border: 1px solid var(--hairline);
+  border-radius: 0.35rem;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.15rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+.feed-prose pre {
+  overflow-x: auto;
+  border: 1px solid var(--hairline);
+  border-radius: 0.875rem;
+  background: var(--surface);
+  padding: 1.25rem;
+}
+.feed-prose pre code { font-family: var(--font-mono); font-size: 0.9rem; }
+.feed-prose img { border-radius: 0.875rem; }
+.feed-prose hr { border-color: var(--hairline); margin-block: 3rem; }
 
 /* Auto-scrolling marquee (hero tech strip). Track holds the list twice; sliding
    by -50% loops seamlessly. Pauses on hover and respects reduced motion. */

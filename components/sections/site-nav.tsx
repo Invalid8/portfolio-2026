@@ -2,22 +2,26 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { nav, owner } from "@/lib/content";
 
 export function SiteNav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-6">
+    <header className="fixed inset-x-0 top-5 z-50 flex justify-center px-6">
       <div className="w-full max-w-6xl">
         <nav
           aria-label="Primary"
-          className="flex h-14 items-center justify-between gap-4 rounded-2xl border border-hairline bg-surface/90 pr-2 pl-6 shadow-lg shadow-black/20 backdrop-blur-md"
+          className="flex h-16 items-center justify-between gap-4 rounded-2xl border border-hairline bg-surface/90 pr-2.5 pl-7 shadow-lg shadow-black/20 backdrop-blur-md"
         >
           <Link
-            href="#home"
+            href="/"
             onClick={() => setOpen(false)}
             className="font-script text-2xl tracking-tight"
           >
@@ -26,12 +30,17 @@ export function SiteNav() {
           </Link>
 
           {/* Desktop links */}
-          <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 md:flex">
+          <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-3 md:flex">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`rounded-lg px-4 py-2 text-base transition-colors hover:bg-surface-2 hover:text-foreground ${
+                    isActive(item.href)
+                      ? "bg-surface-2 text-foreground"
+                      : "text-muted-foreground"
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -40,7 +49,12 @@ export function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <Button asChild size="sm" variant="secondary" className="hidden h-10 rounded-xl border border-hairline px-5 text-sm sm:inline-flex">
+            <Button
+              asChild
+              size="sm"
+              variant="secondary"
+              className="hidden h-11 rounded-xl border border-hairline px-6 text-sm sm:inline-flex"
+            >
               <Link href="#contact">
                 Let&apos;s talk <ArrowUpRight className="size-3.5" />
               </Link>
@@ -68,7 +82,12 @@ export function SiteNav() {
                   <Link
                     href={item.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-xl px-4 py-3 text-sm text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={`block rounded-xl px-4 py-3 text-sm transition-colors hover:bg-surface-2 hover:text-foreground ${
+                      isActive(item.href)
+                        ? "bg-surface-2 text-foreground"
+                        : "text-muted-foreground"
+                    }`}
                   >
                     {item.label}
                   </Link>

@@ -198,7 +198,7 @@ export function Experience() {
       )}
 
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent>
+        <DialogContent className="gap-6 p-6 sm:max-w-2xl sm:p-8">
           <DialogHeader>
             <DialogTitle>
               {editing?.mode === "edit" ? "Edit role" : "Add role"}

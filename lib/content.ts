@@ -53,6 +53,17 @@ export type Experience = {
 
 export type Principle = { index: string; title: string; description: string };
 
+export type FeedPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  date: string;
+  tags: string[];
+  published: boolean;
+};
+
 // ── Identity ────────────────────────────────────────────────────────────────
 export const owner = {
   name: "Daniel Fadamitan",
@@ -67,10 +78,9 @@ export const owner = {
 };
 
 export const nav: NavLink[] = [
-  { label: "Home", href: "#home" },
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Projects", href: "/projects" },
+  { label: "Feed", href: "/feed" },
 ];
 
 export const socials: Social[] = [
@@ -316,6 +326,35 @@ export const contact = {
   subtitle:
     "Have a project in mind? Tell me what you're building - I'll reply within a day.",
 };
+
+export const feedPosts: FeedPost[] = [
+  {
+    id: "why-feed",
+    title: "Why I call this a feed",
+    slug: "why-i-call-this-a-feed",
+    excerpt:
+      "Not every thought needs to become a serious essay. This is where the useful, unfinished, and occasionally unserious things go.",
+    date: "2026-06-22",
+    tags: ["Meta", "Notes"],
+    published: true,
+    body: `# Why I call this a feed
+
+A blog sounds organised. A **feed** can breathe.
+
+Some posts here will be detailed engineering notes. Others might be a quick observation, something I learned while shipping, or an idea that is not ready to wear a suit yet.
+
+That is the point: serious work, unserious thoughts, and the useful space between them.
+
+## What belongs here
+
+- Frontend and product engineering notes
+- Things I learned the hard way
+- Small experiments
+- Opinions that may age badly
+
+If it came from my work or my curiosity, it belongs in the feed.`,
+  },
+];
 
 // ── Optional sections, built but NOT mounted yet (no source data) ──────────
 // Wire these into app/page.tsx once real content exists.

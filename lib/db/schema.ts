@@ -8,7 +8,7 @@
  * every persisted field is a declared column. The column JS keys must match the
  * field names the app reads/writes (the adapter looks columns up by name).
  */
-import { pgTable, text, integer, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 
 /** Bookkeeping columns shared by every table. */
 const stamps = {
@@ -86,6 +86,20 @@ export const experiences = pgTable("experiences", {
   ...stamps,
 });
 
+/** Feed posts — Markdown/MDX source with manual ordering. */
+export const feeds = pgTable("feeds", {
+  id: text("id").primaryKey(),
+  title: text("title"),
+  slug: text("slug").unique(),
+  excerpt: text("excerpt"),
+  body: text("body"),
+  date: text("date"),
+  tags: text("tags").array(),
+  published: boolean("published").default(true),
+  order: integer("order"),
+  ...stamps,
+});
+
 /**
  * The map the CMS adapter takes, keyed by **collection name**. The keys must
  * match the `collection` strings the app uses in `fetchCollection`, `editField`,
@@ -98,4 +112,5 @@ export const schema = {
   projects,
   tools,
   experiences,
+  feeds,
 };

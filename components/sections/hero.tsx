@@ -22,7 +22,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative z-10 mx-auto flex min-h-[760px] w-full max-w-6xl flex-col justify-center px-6 pt-28 pb-14"
+      className="relative z-10 mx-auto flex min-h-svh w-full max-w-6xl flex-col justify-center px-6 pt-32 pb-16"
     >
       <Reveal delay={80}>
         <h1 className="max-w-[16ch] font-display text-5xl font-medium leading-[1.02] tracking-[-0.04em] sm:text-7xl">
@@ -70,7 +70,7 @@ export function Hero() {
       </Reveal>
 
       <Reveal delay={360}>
-        <div className="mt-24 overflow-hidden mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+        <div className="mt-24 xl:mt-30 overflow-hidden mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
           <div className="marquee-track flex items-center gap-x-18">
             {[...heroStack, ...heroStack].map((t, i) => (
               <span
@@ -95,7 +95,6 @@ export function Hero() {
           </div>
         </div>
       </Reveal>
-
     </section>
   );
 }

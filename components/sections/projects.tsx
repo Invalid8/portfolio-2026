@@ -24,7 +24,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { ImageUploadField } from "@/components/editable/image-upload-field";
-import { projects as staticProjects, socials } from "@/lib/content";
+import { projects as staticProjects } from "@/lib/content";
 import { formatMonthYear } from "@/lib/format";
 
 type ProjectItem = {
@@ -52,9 +52,6 @@ const fallback: ProjectItem[] = staticProjects.map((p, i) => ({
   order: i,
 }));
 
-const viewAllHref =
-  socials.find((s) => /github/i.test(s.name))?.href ?? "#contact";
-
 type FormState = {
   title: string;
   description: string;
@@ -77,7 +74,15 @@ function toForm(p?: ProjectItem): FormState {
   };
 }
 
-export function Projects() {
+export function Projects({
+  showViewAll = true,
+  title = "Featured",
+  highlight = "projects",
+}: {
+  showViewAll?: boolean;
+  title?: string;
+  highlight?: string;
+} = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const { items: cmsItems, createItem, updateItem, deleteItem, reorderItems } =
     usePageContext();
@@ -135,13 +140,15 @@ export function Projects() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <Eyebrow>selected work</Eyebrow>
-            <SectionHeading lead="Featured" highlight="projects" className="mt-4" />
+            <SectionHeading lead={title} highlight={highlight} className="mt-4" />
           </div>
-          <Button asChild size="lg" className="rounded-full px-5">
-            <Link href={viewAllHref} target="_blank" rel="noopener noreferrer">
-              View all <ArrowUpRight className="size-4" />
-            </Link>
-          </Button>
+          {showViewAll && (
+            <Button asChild size="lg" className="rounded-full px-5">
+              <Link href="/projects">
+                View all <ArrowUpRight className="size-4" />
+              </Link>
+            </Button>
+          )}
         </div>
       </Reveal>
 
@@ -253,7 +260,7 @@ export function Projects() {
               setForm(toForm());
               setEditing({ mode: "add" });
             }}
-            className="flex min-h-48 items-center justify-center gap-2 rounded-xl border border-dashed border-hairline text-sm text-muted-foreground transition-colors hover:border-(--text-muted) hover:text-foreground"
+            className="flex min-h-48 items-center justify-center gap-2 rounded-xl border border-dashed border-lime/40 bg-lime/10 text-sm font-medium text-lime transition-colors hover:border-lime hover:bg-lime/15"
           >
             <Plus className="size-4" /> Add project
           </button>
@@ -326,7 +333,7 @@ export function Projects() {
 
       {/* Add / edit form */}
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent>
+        <DialogContent className="gap-6 p-6 sm:max-w-2xl sm:p-8">
           <ImageUploadField
             value={form.thumbnail}
             onChange={set("thumbnail")}

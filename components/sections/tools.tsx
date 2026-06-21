@@ -155,7 +155,7 @@ export function Tools() {
           <button
             type="button"
             onClick={() => setAddOpen(true)}
-            className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-hairline p-4 text-sm text-muted-foreground transition-colors hover:border-[color:var(--text-muted)] hover:text-foreground"
+            className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-lime/40 bg-lime/10 p-4 text-sm font-medium text-lime transition-colors hover:border-lime hover:bg-lime/15 hover:text-lime"
           >
             <Plus className="size-4" /> Add tool
           </button>
@@ -170,7 +170,7 @@ export function Tools() {
       )}
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent>
+        <DialogContent className="gap-6 p-6 sm:max-w-2xl sm:p-8">
           <ImageUploadField value={img} onChange={setImg} variant="banner" />
           <DialogHeader>
             <DialogTitle>Add a tool</DialogTitle>

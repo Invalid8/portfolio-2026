@@ -8,6 +8,13 @@
       "when": 1782080014100,
       "tag": "0000_lumpy_gravity",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782085443940,
+      "tag": "0001_fixed_micromacro",
+      "breakpoints": true
     }
   ]
 }

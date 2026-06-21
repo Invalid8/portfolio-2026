@@ -11,6 +11,7 @@ const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc
   projects: { field: "order", direction: "asc" },
   tools: { field: "order", direction: "asc" },
   experiences: { field: "start", direction: "desc" },
+  feeds: { field: "order", direction: "asc" },
 };
 
 /**

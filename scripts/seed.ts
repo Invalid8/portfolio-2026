@@ -12,7 +12,7 @@ import "dotenv/config";
 import { PostgresDataAdapter } from "@dalgoridim/headless-cms/adapters/postgres";
 import { schema } from "../lib/db/schema";
 import { defaultItems } from "../lib/cms/sections";
-import { projects, tools, experiences } from "../lib/content";
+import { projects, tools, experiences, feedPosts } from "../lib/content";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -74,6 +74,20 @@ async function main() {
     });
   }
   console.log(`✅ ${tools.length} tools`);
+
+  for (const [i, post] of feedPosts.entries()) {
+    await data.upsert("feeds", post.id, {
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      body: post.body,
+      date: post.date,
+      tags: post.tags,
+      published: post.published,
+      order: i,
+    });
+  }
+  console.log(`✅ ${feedPosts.length} feed posts`);
 
   console.log("\n✨ Done.");
   process.exit(0);
