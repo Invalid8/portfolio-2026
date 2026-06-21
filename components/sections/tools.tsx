@@ -81,7 +81,7 @@ export function Tools() {
     <Section
       id="tools"
       width="wide"
-      className="my-16 max-w-[744px] rounded-2xl border border-hairline bg-surface px-8 sm:px-12"
+      className="my-16 max-w-6xl rounded-2xl border border-hairline bg-surface px-8 sm:px-12"
     >
       <Reveal>
         <Eyebrow>tools i use</Eyebrow>

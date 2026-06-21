@@ -11,15 +11,15 @@ export function SiteNav() {
 
   return (
     <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-6">
-      <div className="w-full max-w-[744px]">
+      <div className="w-full max-w-6xl">
         <nav
           aria-label="Primary"
-          className="flex h-10 items-center justify-between gap-4 rounded-xl border border-hairline bg-surface/90 pr-1 pl-5 shadow-lg shadow-black/20 backdrop-blur-md"
+          className="flex h-14 items-center justify-between gap-4 rounded-2xl border border-hairline bg-surface/90 pr-2 pl-6 shadow-lg shadow-black/20 backdrop-blur-md"
         >
           <Link
             href="#home"
             onClick={() => setOpen(false)}
-            className="font-script text-xl tracking-tight"
+            className="font-script text-2xl tracking-tight"
           >
             {owner.handle}
             <span className="text-lime">.</span>
@@ -31,7 +31,7 @@ export function SiteNav() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="rounded-lg px-3 py-1.5 text-[11px] text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
+                  className="rounded-lg px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground"
                 >
                   {item.label}
                 </Link>
@@ -40,7 +40,7 @@ export function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <Button asChild size="sm" variant="secondary" className="hidden h-8 rounded-lg border border-hairline px-4 text-[11px] sm:inline-flex">
+            <Button asChild size="sm" variant="secondary" className="hidden h-10 rounded-xl border border-hairline px-5 text-sm sm:inline-flex">
               <Link href="#contact">
                 Let&apos;s talk <ArrowUpRight className="size-3.5" />
               </Link>
