@@ -13,12 +13,12 @@ export function Section({
   className?: string;
   width?: "default" | "wide";
 }) {
+  void width;
   return (
     <section
       id={id}
       className={cn(
-        "relative z-10 mx-auto w-full px-6 py-20 sm:py-28 scroll-mt-28",
-        width === "wide" ? "max-w-6xl" : "max-w-5xl",
+        "relative z-10 mx-auto w-full max-w-[792px] px-6 py-20 scroll-mt-24 sm:py-24",
         className,
       )}
     >

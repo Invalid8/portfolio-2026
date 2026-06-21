@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ArrowUpRight, ArrowDown } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { hero, tools } from "@/lib/content";
+import { hero, owner, tools } from "@/lib/content";
 
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
 const heroStack = tools.filter((t) =>
@@ -22,10 +22,17 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative z-10 mx-auto flex min-h-[92vh] w-full max-w-6xl flex-col justify-center px-6 pt-32 xl:pt-40 pb-16"
+      className="relative z-10 mx-auto flex min-h-[730px] w-full max-w-[792px] flex-col px-6 pt-40 pb-14"
     >
+      <Reveal>
+        <div className="flex items-center gap-2 text-[10px] uppercase text-muted-foreground">
+          <span className="grid size-8 place-items-center overflow-hidden rounded-md border border-white/40 bg-[#e5e5e5] text-[9px] font-semibold text-ink">DF</span>
+          <span className="size-1.5 rounded-full bg-lime shadow-[0_0_8px_var(--lime)]" />
+          {owner.available ? "Available for freelance" : "Currently unavailable"}
+        </div>
+      </Reveal>
       <Reveal delay={80}>
-        <h1 className="mt-6 max-w-[16ch] font-display text-5xl font-semibold leading-[0.98] tracking-tight sm:text-7xl">
+        <h1 className="mt-7 max-w-[17ch] font-display text-[2.65rem] font-medium leading-[1.08] tracking-[-0.035em] sm:text-[3.2rem]">
           <EditableText
             collection="portfolio"
             sectionKey="hero"
@@ -51,21 +58,9 @@ export function Hero() {
         </h1>
       </Reveal>
 
-      <Reveal delay={160}>
-        <EditableText
-          as="p"
-          collection="portfolio"
-          sectionKey="hero"
-          fieldKey="subtitle"
-          className="mt-8 block max-w-xl text-lg leading-relaxed text-muted-foreground"
-        >
-          {hero.subtitle}
-        </EditableText>
-      </Reveal>
-
       <Reveal delay={240}>
-        <div className="mt-10 flex flex-wrap items-center gap-3">
-          <Button asChild size="lg" className="rounded-full px-4 py-4">
+        <div className="mt-7 flex flex-wrap items-center gap-2">
+          <Button asChild size="lg" className="h-10 rounded-lg px-6 text-xs">
             <Link href="#contact">
               Let&apos;s talk <ArrowUpRight className="size-4" />
             </Link>
@@ -74,7 +69,7 @@ export function Hero() {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full px-4 py-4"
+            className="h-10 rounded-lg px-6 text-xs"
           >
             <Link href="#work">View work</Link>
           </Button>
@@ -82,7 +77,7 @@ export function Hero() {
       </Reveal>
 
       <Reveal delay={360}>
-        <div className="mt-24 overflow-hidden mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+        <div className="mt-20 overflow-hidden mask-[linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
           <div className="marquee-track flex items-center gap-x-18">
             {[...heroStack, ...heroStack].map((t, i) => (
               <span
@@ -99,7 +94,7 @@ export function Hero() {
                   height={20}
                   className="size-5"
                 />
-                <span className="text-3xl font-medium text-muted-foreground">
+                <span className="text-xl font-semibold text-muted-foreground">
                   {t.name}
                 </span>
               </span>
@@ -108,14 +103,6 @@ export function Hero() {
         </div>
       </Reveal>
 
-      <Reveal delay={420}>
-        <Link
-          href="#about"
-          className="mt-22 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground"
-        >
-          <ArrowDown className="size-3.5" /> Scroll
-        </Link>
-      </Reveal>
     </section>
   );
 }

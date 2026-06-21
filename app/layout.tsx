@@ -48,7 +48,10 @@ export default async function RootLayout({
       lang="en"
       className={`dark ${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${allura.variable} h-full antialiased`}
     >
-      <body className="grain min-h-full flex flex-col bg-background text-foreground">
+      <body
+        suppressHydrationWarning
+        className="grain min-h-full flex flex-col bg-background text-foreground"
+      >
         <Providers initialItems={initialItems}>{children}</Providers>
         <Toaster position="bottom-right" />
       </body>

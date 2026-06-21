@@ -1,21 +1,19 @@
-import { Section, Eyebrow } from "@/components/section";
+import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { about, owner } from "@/lib/content";
+import { about, owner, stats } from "@/lib/content";
 
 export function About() {
   return (
-    <Section id="about">
-      <Reveal>
-        <Eyebrow>about</Eyebrow>
-      </Reveal>
+    <Section id="about" className="py-14 sm:py-20">
+      <div className="surface-card px-7 py-10 sm:px-12 sm:py-14">
       <Reveal delay={80}>
         <EditableText
           as="p"
           collection="portfolio"
           sectionKey="about"
           fieldKey="leading"
-          className="mt-8 block font-display text-2xl leading-snug tracking-tight sm:text-3xl"
+          className="block font-display text-lg leading-relaxed tracking-tight sm:text-xl"
         >
           {about.leading}
         </EditableText>
@@ -26,16 +24,29 @@ export function About() {
           collection="portfolio"
           sectionKey="about"
           fieldKey="trailing"
-          className="mt-6 block max-w-2xl text-lg leading-relaxed text-muted-foreground"
+          className="mt-1 block max-w-2xl text-lg leading-relaxed text-muted-foreground"
         >
           {about.trailing}
         </EditableText>
       </Reveal>
       <Reveal delay={240}>
-        <p className="mt-8 font-script text-4xl text-lime sm:text-5xl">
+        <p className="mt-6 font-script text-4xl text-foreground sm:text-5xl">
           {owner.name}
         </p>
       </Reveal>
+      <div className="mt-10 grid grid-cols-3 gap-5 sm:mt-12 sm:gap-10">
+        {stats.map((stat, i) => (
+          <div key={stat.label}>
+            <EditableText collection="stats" sectionKey={String(i)} fieldKey="value" className="font-display text-3xl tracking-tight sm:text-5xl">
+              {stat.value}
+            </EditableText>
+            <EditableText collection="stats" sectionKey={String(i)} fieldKey="label" className="mt-2 block font-mono text-[8px] uppercase leading-relaxed text-muted-foreground sm:text-[9px]">
+              {stat.label}
+            </EditableText>
+          </div>
+        ))}
+      </div>
+      </div>
     </Section>
   );
 }

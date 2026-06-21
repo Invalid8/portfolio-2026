@@ -78,7 +78,11 @@ export function Tools() {
   }
 
   return (
-    <Section id="tools" width="wide">
+    <Section
+      id="tools"
+      width="wide"
+      className="my-16 max-w-[744px] rounded-2xl border border-hairline bg-surface px-8 sm:px-12"
+    >
       <Reveal>
         <Eyebrow>tools i use</Eyebrow>
         <SectionHeading lead="The everyday" highlight="kit" className="mt-4" />

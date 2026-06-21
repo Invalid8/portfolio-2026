@@ -1,7 +1,6 @@
 import { SiteNav } from "@/components/sections/site-nav";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
-import { Stats } from "@/components/sections/stats";
 import { Services } from "@/components/sections/services";
 import { Tools } from "@/components/sections/tools";
 import { Projects } from "@/components/sections/projects";
@@ -20,7 +19,6 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <About />
-        <Stats />
         <Services />
         <Tools />
         <Projects />
