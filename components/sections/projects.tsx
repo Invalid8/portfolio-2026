@@ -9,6 +9,8 @@ import {
   Pencil,
   ArrowUpRight,
   Code2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useCmsAuth, usePageContext } from "@dalgoridim/headless-cms/client";
 import { Section, Eyebrow, SectionHeading } from "@/components/section";
@@ -134,6 +136,15 @@ export function Projects({
     setEditing(null);
   }
 
+  function openAdd() {
+    setForm(toForm());
+    setEditing({ mode: "add" });
+  }
+
+  const detailIndex = detail ? items.findIndex((item) => item.id === detail.id) : -1;
+  const previousProject = detailIndex >= 0 ? items[(detailIndex - 1 + items.length) % items.length] : undefined;
+  const nextProject = detailIndex >= 0 ? items[(detailIndex + 1) % items.length] : undefined;
+
   return (
     <Section id="work" width="wide">
       <Reveal>
@@ -147,6 +158,11 @@ export function Projects({
               <Link href="/projects">
                 View all <ArrowUpRight className="size-4" />
               </Link>
+            </Button>
+          )}
+          {!showViewAll && canEdit && (
+            <Button type="button" size="lg" onClick={openAdd}>
+              <Plus className="size-4" /> Add project
             </Button>
           )}
         </div>
@@ -256,10 +272,7 @@ export function Projects({
         {canEdit && (
           <button
             type="button"
-            onClick={() => {
-              setForm(toForm());
-              setEditing({ mode: "add" });
-            }}
+            onClick={openAdd}
             className="flex min-h-48 items-center justify-center gap-2 rounded-xl border border-dashed border-lime/40 bg-lime/10 text-sm font-medium text-lime transition-colors hover:border-lime hover:bg-lime/15"
           >
             <Plus className="size-4" /> Add project
@@ -276,57 +289,75 @@ export function Projects({
 
       {/* Detail view */}
       <Dialog open={!!detail} onOpenChange={(o) => !o && setDetail(null)}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="max-h-[92svh] gap-0 overflow-hidden bg-[#101011] p-0 sm:max-w-6xl">
           {detail && (
-            <>
-              <div className="-mx-4 -mt-4 mb-1 aspect-video overflow-hidden rounded-t-xl border-b border-hairline bg-surface-2">
-                {detail.thumbnail && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={detail.thumbnail}
-                    alt=""
-                    className="size-full object-cover"
-                  />
-                )}
+            <div className="grid max-h-[92svh] md:grid-cols-[1fr_3fr_1fr]">
+              {previousProject && items.length > 1 && (
+                <button type="button" onClick={() => setDetail(previousProject)} className="group/side relative hidden min-w-0 flex-col overflow-hidden border-r border-hairline bg-surface text-left md:flex">
+                  <div className="relative h-full min-h-[34rem] overflow-hidden opacity-35 transition-opacity group-hover/side:opacity-60">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {previousProject.thumbnail && <img src={previousProject.thumbnail} alt="" className="size-full object-cover" />}
+                    <span className="absolute inset-0 bg-black/65" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <ChevronLeft className="mb-3 size-5 text-lime" />
+                    <p className="line-clamp-2 font-display text-lg">{previousProject.title}</p>
+                    <p className="mt-2 font-mono text-[10px] uppercase text-muted-foreground">Previous project</p>
+                  </div>
+                </button>
+              )}
+
+              <div className="min-w-0 overflow-y-auto">
+                <div className="aspect-video overflow-hidden border-b border-hairline bg-surface-2">
+                  {detail.thumbnail ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={detail.thumbnail} alt={`${detail.title} project preview`} className="size-full object-cover" />
+                  ) : (
+                    <span className="grid size-full place-items-center text-muted-foreground">No preview image</span>
+                  )}
+                </div>
+                <div className="p-6 sm:p-8">
+                  <DialogHeader>
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <span className="font-mono text-xs uppercase tracking-[0.14em] text-lime">
+                        Project {detailIndex + 1} / {items.length}
+                      </span>
+                      <span className="font-mono text-xs text-muted-foreground">{formatMonthYear(detail.date ?? detail.year)}</span>
+                    </div>
+                    <DialogTitle className="mt-4 font-display text-3xl leading-tight tracking-tight sm:text-4xl">{detail.title}</DialogTitle>
+                    <DialogDescription className="mt-3 max-w-2xl text-base leading-relaxed">{detail.description}</DialogDescription>
+                  </DialogHeader>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {detail.tags.map((tag) => (
+                      <span key={tag} className="rounded-full border border-hairline px-3 py-1 font-mono text-[11px] text-muted-foreground">{tag}</span>
+                    ))}
+                  </div>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    {detail.link && <Button asChild size="lg"><Link href={detail.link} target="_blank" rel="noopener noreferrer">Visit project <ArrowUpRight className="size-4" /></Link></Button>}
+                    {detail.github && <Button asChild size="lg" variant="outline"><Link href={detail.github} target="_blank" rel="noopener noreferrer"><Code2 className="size-4" /> Source</Link></Button>}
+                  </div>
+                  <div className="mt-8 flex items-center justify-between border-t border-hairline pt-5 md:hidden">
+                    <Button type="button" variant="ghost" onClick={() => previousProject && setDetail(previousProject)} disabled={items.length < 2}><ChevronLeft className="size-4" /> Previous</Button>
+                    <Button type="button" variant="ghost" onClick={() => nextProject && setDetail(nextProject)} disabled={items.length < 2}>Next <ChevronRight className="size-4" /></Button>
+                  </div>
+                </div>
               </div>
-              <DialogHeader>
-                <DialogTitle className="flex items-baseline justify-between gap-3">
-                  {detail.title}
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {formatMonthYear(detail.date ?? detail.year)}
-                  </span>
-                </DialogTitle>
-                <DialogDescription className="leading-relaxed">
-                  {detail.description}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex flex-wrap gap-2">
-                {detail.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-hairline px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-2 flex flex-wrap gap-3">
-                {detail.link && (
-                  <Button asChild size="lg" className="rounded-full px-5">
-                    <Link href={detail.link} target="_blank" rel="noopener noreferrer">
-                      Visit <ArrowUpRight className="size-4" />
-                    </Link>
-                  </Button>
-                )}
-                {detail.github && (
-                  <Button asChild size="lg" variant="outline" className="rounded-full px-5">
-                    <Link href={detail.github} target="_blank" rel="noopener noreferrer">
-                      <Code2 className="size-4" /> Source
-                    </Link>
-                  </Button>
-                )}
-              </div>
-            </>
+
+              {nextProject && items.length > 1 && (
+                <button type="button" onClick={() => setDetail(nextProject)} className="group/side relative hidden min-w-0 flex-col overflow-hidden border-l border-hairline bg-surface text-left md:flex">
+                  <div className="relative h-full min-h-[34rem] overflow-hidden opacity-35 transition-opacity group-hover/side:opacity-60">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {nextProject.thumbnail && <img src={nextProject.thumbnail} alt="" className="size-full object-cover" />}
+                    <span className="absolute inset-0 bg-black/65" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-right">
+                    <ChevronRight className="mb-3 ml-auto size-5 text-lime" />
+                    <p className="line-clamp-2 font-display text-lg">{nextProject.title}</p>
+                    <p className="mt-2 font-mono text-[10px] uppercase text-muted-foreground">Next project</p>
+                  </div>
+                </button>
+              )}
+            </div>
           )}
         </DialogContent>
       </Dialog>
