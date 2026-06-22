@@ -187,6 +187,13 @@ export function Feed() {
             onDrop={() => handleDrop(post.id)}
             className={`surface-card group relative flex min-h-80 flex-col p-7 transition-colors hover:border-lime/50 ${canManage ? "cursor-grab active:cursor-grabbing" : ""} ${dragId === post.id ? "opacity-50" : ""}`}
           >
+            {!canManage && (
+              <Link
+                href={`/f/${post.slug}`}
+                aria-label={`Open ${post.title}`}
+                className="absolute inset-0 z-10 rounded-[inherit]"
+              />
+            )}
             <div className="flex items-center justify-between gap-4 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
               <div className="flex items-center gap-2">
                 {canManage && <GripVertical className="size-4 text-lime" />}
@@ -211,12 +218,18 @@ export function Feed() {
               ))}
             </div>
             <div className="mt-auto flex items-end justify-between gap-4 pt-8">
-              <Link
-                href={`/f/${post.slug}`}
-                className="inline-flex items-center gap-2 text-sm transition-colors hover:text-lime"
-              >
-                Open post <ArrowUpRight className="size-4" />
-              </Link>
+              {canManage ? (
+                <Link
+                  href={`/f/${post.slug}`}
+                  className="relative z-10 inline-flex items-center gap-2 text-sm transition-colors hover:text-lime"
+                >
+                  Open post <ArrowUpRight className="size-4" />
+                </Link>
+              ) : (
+                <span className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors group-hover:text-lime">
+                  Open post <ArrowUpRight className="size-4" />
+                </span>
+              )}
               {canManage && (
                 <div className="flex gap-2">
                   <Link
