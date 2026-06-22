@@ -96,7 +96,9 @@ export function OgCard({
             </div>
           ))}
         </div>
-        <div style={{ display: "flex" }}>dalgoridim.com</div>
+        <div style={{ display: "flex" }}>
+          {process.env.NEXT_PUBLIC_SITE_URL ?? "https://dalgoridim.com"}
+        </div>
       </div>
     </div>
   );
@@ -161,9 +163,7 @@ export function HomeOgCard() {
         <div style={{ display: "flex", color: "#8f8f98" }}>
           experiences people
         </div>
-        <div style={{ display: "flex", color: "#8f8f98" }}>
-          actually enjoy.
-        </div>
+        <div style={{ display: "flex", color: "#8f8f98" }}>actually enjoy.</div>
       </div>
 
       <div
