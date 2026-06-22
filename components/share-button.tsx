@@ -8,10 +8,12 @@ export function ShareButton({
   title,
   text,
   url,
+  className,
 }: {
   title: string;
   text: string;
   url: string;
+  className?: string;
 }) {
   async function share() {
     if (navigator.share) {
@@ -19,7 +21,8 @@ export function ShareButton({
         await navigator.share({ title, text, url });
         return;
       } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
       }
     }
 
@@ -32,7 +35,13 @@ export function ShareButton({
   }
 
   return (
-    <Button type="button" variant="outline" size="lg" onClick={share}>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      onClick={share}
+      className={className}
+    >
       <Share2 className="size-4" /> Share
     </Button>
   );

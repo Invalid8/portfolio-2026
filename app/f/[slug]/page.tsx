@@ -90,16 +90,24 @@ export default async function FeedPostPage({ params }: PageProps) {
       <FeedNav />
       <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-6 pt-20 pb-24">
         <header className="mt-12 border-b border-hairline pb-10">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
-            <time dateTime={post.date}>{post.date}</time>
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-hairline px-2.5 py-1"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              <time dateTime={post.date}>{post.date}</time>
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-hairline px-2.5 py-1"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <ShareButton
+              title={post.title}
+              text={post.excerpt}
+              url={postUrl}
+              className="shrink-0"
+            />
           </div>
           <h1 className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.04em] sm:text-7xl">
             {post.title}
@@ -107,13 +115,6 @@ export default async function FeedPostPage({ params }: PageProps) {
           <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
             {post.excerpt}
           </p>
-          <div className="mt-8">
-            <ShareButton
-              title={post.title}
-              text={post.excerpt}
-              url={postUrl}
-            />
-          </div>
         </header>
         <article className="feed-prose mt-12">
           <Markdown source={post.body} />
