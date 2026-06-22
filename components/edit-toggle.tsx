@@ -20,16 +20,11 @@ export function EditToggle() {
         "inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-lg backdrop-blur-md transition-colors",
         isEditing
           ? "border-lime bg-lime text-ink"
-          : "border-hairline bg-surface/80 text-foreground hover:border-[color:var(--text-muted)]",
+          : "border-hairline bg-surface/80 text-foreground hover:border-(--text-muted)",
       )}
     >
       {isEditing ? <Check className="size-4" /> : <Pencil className="size-4" />}
       {isEditing ? "Done" : "Edit"}
-      {/* {isEditing && !isAdmin && (
-        <span className="ml-1 font-mono text-[10px] uppercase tracking-wide opacity-70">
-          preview
-        </span>
-      )} */}
     </button>
   );
 }

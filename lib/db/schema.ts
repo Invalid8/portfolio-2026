@@ -1,12 +1,8 @@
 /**
- * Drizzle schema — the single source of DDL. Every CMS collection is a typed
- * table here; the headless-cms Postgres adapter does runtime reads/writes (DML)
- * against these same tables (it's handed the `schema` map below). Drizzle Kit
- * owns migrations and discovers tables from the top-level exports.
- *
- * There is no schemaless `documents` table and no `extra` JSONB column anymore:
- * every persisted field is a declared column. The column JS keys must match the
- * field names the app reads/writes (the adapter looks columns up by name).
+ * Drizzle schema — the single source of DDL. Drizzle Kit owns migrations; the
+ * headless-cms Postgres adapter does runtime DML against these same tables (it's
+ * handed the `schema` map below). Column JS keys must match the field names the
+ * app reads/writes — the adapter looks columns up by name.
  */
 import { pgTable, text, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 

@@ -16,14 +16,9 @@ const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc
 
 /**
  * Read every editable collection from Postgres into one `ItemMap` for hydrating
- * `PageProvider`'s `initialItems`.
- *
- * - **Section collections** (portfolio/stats/principles): DB rows merged over the
- *   defaults (keyed by id), so the page always has a complete set of fields to
- *   render and edit even before the DB is seeded / if it's unreachable.
- * - **List collections** (projects/tools/experiences): DB-driven and sorted; an
- *   empty (un-seeded) collection comes back `[]` so the component can fall back
- *   to its static content.
+ * `PageProvider`'s `initialItems`. Section collections merge DB rows over the
+ * defaults (so the page always renders, even un-seeded or if the DB is down);
+ * list collections come back sorted, or `[]` so components use static fallbacks.
  */
 export async function fetchItems(): Promise<ItemMap> {
   const adapter = getDataAdapter();

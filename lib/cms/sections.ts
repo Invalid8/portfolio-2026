@@ -3,16 +3,11 @@ import type { Item, ItemMap } from "@dalgoridim/headless-cms/server";
 import { hero, about, contact, stats, principles } from "../content";
 
 /**
- * Default editable copy for the "section" collections — singletons and small
- * fixed lists whose *text* is CMS-backed. Structural data (ids, logos, links,
- * tags) stays in `lib/content.ts`; only the copy here is editable.
- *
- * One model: each collection is a list of items, each with a stable `id` (the
- * old "section key"). Shared by the server reads (`data.ts`) and the seed
- * (`scripts/seed.ts`) so there's one source of truth.
- *
- * The list collections — projects, tools, experiences — are NOT here: they are
- * DB-driven and fall back to `lib/content.ts` in their components when un-seeded.
+ * Default editable copy for the "section" collections — singleton docs and small
+ * fixed lists whose text is CMS-backed (each an `Item` with a stable `id`).
+ * Shared by the server reads (`data.ts`) and the seed (`scripts/seed.ts`). The
+ * list collections (projects/tools/experiences) are DB-driven and live in
+ * `lib/content.ts` instead.
  */
 const doc = (id: string, fields: Record<string, unknown>): Item => ({ id, ...fields });
 

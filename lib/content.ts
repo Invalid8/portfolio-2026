@@ -1,11 +1,7 @@
 /**
- * Typed site content for portfolio-2026.
- *
- * Phase 3 consumes these objects directly (static page). Phase 4 reuses the
- * same shapes for the Postgres seed + CMS reads, so keep them serializable.
- *
- * Owner content is real (Daniel Fadamitan / dalgoridim), mined from
- * portfolio-2025. Replace freely via the live CMS once wired.
+ * Typed site content. Consumed directly by the static page, and reused as the
+ * Postgres seed + static fallback for the editable collections, so the shapes
+ * stay serializable. Edit freely via the live CMS once seeded.
  */
 
 export type NavLink = { label: string; href: string };
