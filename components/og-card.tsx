@@ -97,7 +97,8 @@ export function OgCard({
           ))}
         </div>
         <div style={{ display: "flex" }}>
-          {process.env.NEXT_PUBLIC_SITE_URL ?? "https://dalgoridim.com"}
+          {process.env.NEXT_PUBLIC_SITE_URL?.replace("https://", "") ??
+            "dalgoridim.com"}
         </div>
       </div>
     </div>
