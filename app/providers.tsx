@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { toast } from "sonner";
 import {
+  AnonymousEditProvider,
   PageProvider,
-  CmsAuthProvider,
   type Notifier,
   type ItemMap,
 } from "@dalgoridim/headless-cms/client";
@@ -16,25 +16,6 @@ const notify: Notifier = {
   success: (m) => toast.success(m),
   error: (m) => toast.error(m),
 };
-
-
-/**
- * Fallback auth when Google sign-in isn't configured yet: visitors can still
- * toggle edit mode locally (optimistic edits), but `isAdmin` is false so saves
- * are rejected by the server gate — exactly the "anyone edits, only admin saves"
- * model, minus a real login.
- */
-function LocalEditProvider({ children }: { children: ReactNode }) {
-  const [isEditing, setIsEditing] = useState(false);
-  return (
-    <CmsAuthProvider
-      value={{ isAdmin: false, isEditing, toggleEdit: () => setIsEditing((v) => !v) }}
-    >
-      {children}
-    </CmsAuthProvider>
-  );
-}
-
 export function Providers({
   children,
   initialItems,
@@ -61,5 +42,5 @@ export function Providers({
     );
   }
 
-  return <LocalEditProvider>{page}</LocalEditProvider>;
+  return <AnonymousEditProvider>{page}</AnonymousEditProvider>;
 }

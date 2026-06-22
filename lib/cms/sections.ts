@@ -1,4 +1,4 @@
-import type { Item, ItemMap } from "@dalgoridim/headless-cms/server";
+import type { Item, ItemMap } from "@dalgoridim/headless-cms";
 // Relative (not "@/…") so the tsx seed script can load this without path-alias resolution.
 import { hero, about, contact, stats, principles } from "../content";
 
@@ -31,6 +31,3 @@ export function defaultItems(): ItemMap {
     ),
   };
 }
-
-/** Collections that hold editable section docs (loaded with defaults by `data.ts`). */
-export const SECTION_COLLECTIONS = Object.keys(defaultItems());

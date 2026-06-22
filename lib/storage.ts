@@ -6,4 +6,4 @@ import { cloudinaryStorage } from "@dalgoridim/headless-cms/storage/cloudinary";
  * the resulting URL (tool logos, project thumbnails). Uploads are signed by
  * `/api/admin/sign`, so only an admin can upload.
  */
-export const storage = cloudinaryStorage({ folder: "portfolio-2026" });
+export const storage = cloudinaryStorage();

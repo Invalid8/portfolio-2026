@@ -1,5 +1,6 @@
 import "server-only";
-import type { Item, ItemMap } from "@dalgoridim/headless-cms/server";
+import type { ItemMap } from "@dalgoridim/headless-cms";
+import { loadItemMap, type ItemMapLoadConfig } from "@dalgoridim/headless-cms/server";
 import { getDataAdapter } from "./server";
 import { defaultItems } from "./sections";
 
@@ -21,38 +22,17 @@ const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc
  * list collections come back sorted, or `[]` so components use static fallbacks.
  */
 export async function fetchItems(): Promise<ItemMap> {
-  const adapter = getDataAdapter();
   const defaults = defaultItems();
-  const result: ItemMap = {};
-
-  await Promise.all([
-    ...Object.entries(defaults).map(async ([collection, items]) => {
-      const byId = new Map<string, Item>(items.map((it) => [it.id, { ...it }]));
-      try {
-        const rows = await adapter.fetchCollection<Record<string, unknown>>(collection);
-        for (const row of rows) {
-          const id = String(row.id);
-          byId.set(id, { ...(byId.get(id) ?? { id }), ...row, id });
-        }
-      } catch (err) {
-        console.warn(
-          `[cms] ${collection} fell back to defaults:`,
-          (err as Error).message,
-        );
-      }
-      result[collection] = [...byId.values()];
-    }),
-    ...Object.entries(LIST_COLLECTIONS).map(async ([collection, orderBy]) => {
-      try {
-        result[collection] = (await adapter.fetchCollection<Record<string, unknown>>(
-          collection,
-          { orderBy: [orderBy] },
-        )) as Item[];
-      } catch {
-        result[collection] = [];
-      }
-    }),
+  const collections: ItemMapLoadConfig = Object.fromEntries([
+    ...Object.entries(defaults).map(([collection, items]) => [
+      collection,
+      { defaults: items, merge: "byId" as const, fallback: items },
+    ]),
+    ...Object.entries(LIST_COLLECTIONS).map(([collection, orderBy]) => [
+      collection,
+      { query: { orderBy: [orderBy] }, fallback: [] },
+    ]),
   ]);
 
-  return result;
+  return loadItemMap(getDataAdapter(), collections);
 }

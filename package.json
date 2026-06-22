@@ -18,7 +18,7 @@
     "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
-    "@dalgoridim/headless-cms": "^0.9.0",
+    "@dalgoridim/headless-cms": "^0.10.0",
     "@react-oauth/google": "^0.13.5",
     "@uiw/react-md-editor": "^4.1.1",
     "class-variance-authority": "^0.7.1",

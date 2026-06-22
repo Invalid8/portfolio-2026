@@ -5,7 +5,7 @@ A dark, editorial personal portfolio for **Daniel Fadamitan ([dalgoridim](https:
 It's also the first real external consumer of [`@dalgoridim/headless-cms`](https://www.npmjs.com/package/@dalgoridim/headless-cms) — the CMS isn't bolted on, it shapes how every piece of content on the site is read, rendered, and edited.
 
 - **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Postgres (Drizzle)
-- **CMS:** `@dalgoridim/headless-cms@^0.9.0` — Postgres adapter, Google auth, Cloudinary storage
+- **CMS:** `@dalgoridim/headless-cms@^0.10.0` — Postgres adapter, Google auth, Cloudinary storage
 
 ---
 
@@ -35,7 +35,7 @@ Because typed columns sort and filter correctly, ordering (`projects.order`, `ex
 
 ### 4. Resilient server reads with static fallback
 
-`lib/cms/data.ts` reads every collection into one `ItemMap` for hydration. Section collections **merge DB rows over typed defaults** (`lib/cms/sections.ts`), so the page always renders a complete set of fields — even before the DB is seeded, or if it's unreachable. List collections come back sorted, or `[]` so the component falls back to the static content in `lib/content.ts`. The site is never blank because of the CMS.
+`lib/cms/data.ts` configures the package's `loadItemMap` server loader. It reads every collection concurrently into one `ItemMap` for hydration. Section collections **merge DB rows over typed defaults** (`lib/cms/sections.ts`), so the page always renders a complete set of fields — even before the DB is seeded, or if it's unreachable. List collections come back sorted, or `[]` so the component falls back to the static content in `lib/content.ts`. The site is never blank because of the CMS.
 
 ### 5. Auth & storage as adapters — minimal env
 
@@ -47,7 +47,7 @@ Because typed columns sort and filter correctly, ordering (`projects.order`, `ex
 ```
 lib/cms/
   server.ts    getDataAdapter() (Postgres), cmsAuth (Google gate), cmsStorage (Cloudinary)
-  data.ts      server reads → one ItemMap for hydration
+  data.ts      loadItemMap configuration → one ItemMap for hydration
   sections.ts  typed default copy for the singleton/section collections
   feed.ts      single feed-post read (by slug, with static fallback)
   projects.ts  single project read (by slug, with static fallback)

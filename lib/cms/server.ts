@@ -1,6 +1,6 @@
 import "server-only";
 import type { DataAdapter, AuthAdapter, ServerStorageAdapter } from "@dalgoridim/headless-cms/server";
-import { createAdminGate } from "@dalgoridim/headless-cms/server";
+import { createAdminGate, createCmsHandlers } from "@dalgoridim/headless-cms/server";
 import { PostgresDataAdapter } from "@dalgoridim/headless-cms/adapters/postgres";
 import { googleAuth } from "@dalgoridim/headless-cms/auth/google";
 import { cloudinarySign } from "@dalgoridim/headless-cms/storage/cloudinary/server";
@@ -49,5 +49,13 @@ export const cmsStorage: ServerStorageAdapter | undefined = cloudinaryConfigured
       cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
       apiKey: process.env.CLOUDINARY_API_KEY,
       apiSecret: process.env.CLOUDINARY_API_SECRET,
+      folder: "portfolio-2026",
     })
   : undefined;
+
+/** Shared route handlers so CRUD and signing use one configured CMS instance. */
+export const cmsHandlers = createCmsHandlers({
+  data: getDataAdapter(),
+  auth: cmsAuth,
+  storage: cmsStorage,
+});
