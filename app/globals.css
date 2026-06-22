@@ -261,7 +261,10 @@
   font-size: 1.075rem;
   line-height: 1.85;
 }
-.feed-prose > * + * { margin-top: 1.4em; }
+/* Vertical rhythm — also applies one level deep so wrapping content in a
+   <div> (e.g. to justify text) keeps the spacing instead of collapsing it. */
+.feed-prose > * + *,
+.feed-prose > div > * + * { margin-top: 1.4em; }
 .feed-prose h1,
 .feed-prose h2,
 .feed-prose h3 {

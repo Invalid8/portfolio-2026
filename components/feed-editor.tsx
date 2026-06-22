@@ -14,11 +14,13 @@ const MarkdownEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: fals
 
 type FeedForm = Omit<FeedItem, "id" | "order">;
 
+const BLANK_BODY = "# New thought\n\nStart writing…";
+
 const blank = (): FeedForm => ({
   title: "",
   slug: "",
   excerpt: "",
-  body: "# New thought\n\nStart writing…",
+  body: BLANK_BODY,
   date: new Date().toISOString().slice(0, 10),
   tags: [],
   published: true,
@@ -40,10 +42,15 @@ export function FeedEditor({ slug }: { slug?: string }) {
       : blank(),
   );
   const [form, setForm] = useState<FeedForm>(initialForm);
-  const [initialSnapshot] = useState(() => JSON.stringify(initialForm));
+  const [savedSnapshot, setSavedSnapshot] = useState(() => JSON.stringify(initialForm));
+  const [postId, setPostId] = useState<string | undefined>(post?.id);
+  const [currentlyPublished, setCurrentlyPublished] = useState(post?.published ?? false);
   const [saving, setSaving] = useState(false);
   const saved = useRef(false);
-  const hasUnsavedChanges = JSON.stringify(form) !== initialSnapshot;
+  const hasUnsavedChanges = JSON.stringify(form) !== savedSnapshot;
+  const isExisting = Boolean(postId);
+  const hasContent =
+    form.title.trim().length > 0 || (form.body.trim().length > 0 && form.body !== BLANK_BODY);
   const set = <K extends keyof FeedForm>(key: K, value: FeedForm[K]) => setForm((current) => ({ ...current, [key]: value }));
 
   useEffect(() => {
@@ -68,6 +75,7 @@ export function FeedEditor({ slug }: { slug?: string }) {
   }
 
   async function save(published: boolean) {
+    if (!hasContent) return;
     if (published && !form.title.trim()) return;
     const title = form.title.trim() || "Untitled draft";
     const payload = {
@@ -80,9 +88,21 @@ export function FeedEditor({ slug }: { slug?: string }) {
     setSaving(true);
     saved.current = true;
     try {
-      if (post) await updateItem("feeds", post.id, payload);
-      else await createItem("feeds", { ...payload, order: posts.length });
-      router.push("/feed");
+      if (postId) await updateItem("feeds", postId, payload);
+      else {
+        const newId = await createItem("feeds", { ...payload, order: posts.length });
+        setPostId(newId);
+      }
+      setCurrentlyPublished(published);
+      if (published) {
+        // Publishing sends you to the feed listing.
+        router.push("/feed");
+        return;
+      }
+      // Saving a draft keeps you in the editor; just clear the "unsaved" flag.
+      setSavedSnapshot(JSON.stringify(form));
+      saved.current = false;
+      setSaving(false);
     } catch {
       saved.current = false;
       setSaving(false);
@@ -95,13 +115,13 @@ export function FeedEditor({ slug }: { slug?: string }) {
         <div className="flex items-center gap-4">
           <Button type="button" variant="ghost" size="icon" onClick={leaveEditor} aria-label="Back to Feed"><ArrowLeft className="size-5" /></Button>
           <div>
-            <p className="font-display text-lg font-medium">{post ? "Edit post" : "New feed post"}</p>
+            <p className="font-display text-lg font-medium">{isExisting ? "Edit post" : "New feed post"}</p>
             <p className="text-xs text-muted-foreground">Markdown and MDX supported</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button type="button" variant="outline" onClick={() => save(false)} disabled={saving}><Save className="size-4" /> {saving ? "Saving…" : "Save draft"}</Button>
-          <Button type="button" onClick={() => save(true)} disabled={!form.title.trim() || saving}><FileCheck className="size-4" /> Publish</Button>
+          <Button type="button" variant="outline" onClick={() => save(false)} disabled={!hasContent || saving}><Save className="size-4" /> {saving ? "Saving…" : "Save draft"}</Button>
+          <Button type="button" onClick={() => save(true)} disabled={!form.title.trim() || saving}><FileCheck className="size-4" /> {currentlyPublished ? "Save" : "Publish"}</Button>
         </div>
       </header>
 
