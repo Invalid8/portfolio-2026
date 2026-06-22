@@ -10,10 +10,12 @@ import { X } from "lucide-react";
 export function TagInput({
   value,
   onChange,
+  suggestions = [],
   placeholder = "Add a tag…",
 }: {
   value: string[];
   onChange: (tags: string[]) => void;
+  suggestions?: string[];
   placeholder?: string;
 }) {
   const [draft, setDraft] = useState("");
@@ -24,8 +26,15 @@ export function TagInput({
     setDraft("");
   }
 
+  const available = suggestions.filter(
+    (tag) =>
+      !value.includes(tag) &&
+      (!draft || tag.toLowerCase().includes(draft.toLowerCase())),
+  );
+
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-input bg-transparent p-2 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50">
+    <div className="rounded-lg border border-input bg-transparent p-2 focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50">
+      <div className="flex flex-wrap items-center gap-2">
       {value.map((tag) => (
         <span
           key={tag}
@@ -57,6 +66,24 @@ export function TagInput({
         placeholder={value.length ? "" : placeholder}
         className="min-w-[6rem] flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
+      </div>
+      {available.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5 border-t border-hairline pt-2">
+          <span className="mr-1 self-center font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+            Existing
+          </span>
+          {available.map((tag) => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => add(tag)}
+              className="rounded-full border border-hairline bg-surface-2 px-2 py-0.5 font-mono text-[10px] text-muted-foreground transition-colors hover:border-lime/50 hover:text-lime"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

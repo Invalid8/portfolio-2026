@@ -184,7 +184,7 @@
       #000 90%,
       transparent 100%
     );
-    opacity: 1;
+    opacity: 0.42;
   }
 
   /* Full-page film grain overlay. Sits above the bg, below content. */
@@ -305,6 +305,124 @@
 .feed-prose pre code { font-family: var(--font-mono); font-size: 0.9rem; }
 .feed-prose img { border-radius: 0.875rem; }
 .feed-prose hr { border-color: var(--hairline); margin-block: 3rem; }
+
+/* Feed editor: use the portfolio system, not the package's GitHub skin. */
+.feed-editor-shell .w-md-editor,
+.feed-editor-shell .wmde-markdown,
+.feed-editor-shell .wmde-markdown-var {
+  --color-fg-default: var(--text);
+  --color-fg-muted: var(--text-muted);
+  --color-fg-subtle: #626268;
+  --color-canvas-default: #050505;
+  --color-canvas-subtle: #101012;
+  --color-border-default: var(--hairline);
+  --color-border-muted: #1c1c1f;
+  --color-neutral-muted: rgba(199, 242, 60, 0.1);
+  --color-accent-fg: var(--lime);
+  --color-accent-emphasis: var(--lime);
+  --md-editor-background-color: #050505;
+  --md-editor-box-shadow-color: var(--hairline);
+  --md-editor-font-family: var(--font-mono);
+  color-scheme: dark;
+}
+.feed-editor-shell .w-md-editor {
+  min-height: 0;
+  max-height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: #050505 !important;
+  box-shadow: none;
+}
+.feed-editor-shell .w-md-editor-toolbar {
+  min-height: 54px;
+  border-color: var(--hairline);
+  border-radius: 0;
+  background: #0b0b0c !important;
+  padding: 7px 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.feed-editor-shell .w-md-editor-toolbar ul {
+  display: flex;
+  min-width: max-content;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.feed-editor-shell .w-md-editor-toolbar > ul:last-child {
+  position: sticky;
+  right: 0;
+  background: #0b0b0c;
+  box-shadow: -12px 0 12px #0b0b0c;
+}
+.feed-editor-shell .w-md-editor-toolbar li > button {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--text-muted);
+  padding: 8px;
+}
+.feed-editor-shell .w-md-editor-toolbar li > button:hover,
+.feed-editor-shell .w-md-editor-toolbar li.active > button {
+  background: var(--surface-2);
+  color: var(--lime);
+}
+.feed-editor-shell .w-md-editor-toolbar li > button svg {
+  width: 18px;
+  height: 18px;
+}
+.feed-editor-shell .w-md-editor-toolbar-divider {
+  height: 24px;
+  background: var(--hairline);
+  margin-inline: 5px !important;
+}
+.feed-editor-shell .w-md-editor-content,
+.feed-editor-shell .w-md-editor-area,
+.feed-editor-shell .w-md-editor-preview,
+.feed-editor-shell .wmde-markdown {
+  background: #050505 !important;
+}
+.feed-editor-shell .w-md-editor-content {
+  min-height: 0;
+  overflow: hidden;
+}
+.feed-editor-shell .w-md-editor-area,
+.feed-editor-shell .w-md-editor-preview {
+  min-height: 0;
+  overflow: auto !important;
+  overscroll-behavior: contain;
+}
+.feed-editor-shell .w-md-editor-text {
+  padding: 22px !important;
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+}
+.feed-editor-shell .w-md-editor-text-pre > code {
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+}
+.feed-editor-shell .w-md-editor-preview {
+  padding: 24px 30px !important;
+}
+.feed-editor-shell .wmde-markdown {
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.75;
+}
+.feed-editor-shell .wmde-markdown h1,
+.feed-editor-shell .wmde-markdown h2,
+.feed-editor-shell .wmde-markdown h3,
+.feed-editor-shell .wmde-markdown h4 {
+  border-color: var(--hairline);
+  color: var(--text);
+  font-family: var(--font-display);
+  letter-spacing: -0.025em;
+}
+.feed-editor-shell .wmde-markdown a { color: var(--lime); }
 
 /* Auto-scrolling marquee (hero tech strip). Track holds the list twice; sliding
    by -50% loops seamlessly. Pauses on hover and respects reduced motion. */

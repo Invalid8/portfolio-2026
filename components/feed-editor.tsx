@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Save } from "lucide-react";
-import { useCmsAuth, usePageContext } from "@dalgoridim/headless-cms/client";
+import { ArrowLeft, FileCheck, Save } from "lucide-react";
+import { usePageContext } from "@dalgoridim/headless-cms/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TagInput } from "@/components/ui/tag-input";
@@ -31,52 +30,78 @@ function slugify(value: string) {
 
 export function FeedEditor({ slug }: { slug?: string }) {
   const router = useRouter();
-  const { isAdmin } = useCmsAuth();
   const { items: cmsItems, createItem, updateItem } = usePageContext();
   const posts = (cmsItems.feeds as FeedItem[] | undefined) ?? [];
   const post = posts.find((item) => item.slug === slug);
-  const [form, setForm] = useState<FeedForm>(() =>
+  const existingTags = [...new Set(posts.flatMap((item) => item.tags))].sort();
+  const [initialForm] = useState<FeedForm>(() =>
     post
       ? { title: post.title, slug: post.slug, excerpt: post.excerpt, body: post.body, date: post.date, tags: post.tags, published: post.published }
       : blank(),
   );
+  const [form, setForm] = useState<FeedForm>(initialForm);
+  const [initialSnapshot] = useState(() => JSON.stringify(initialForm));
+  const [saving, setSaving] = useState(false);
+  const saved = useRef(false);
+  const hasUnsavedChanges = JSON.stringify(form) !== initialSnapshot;
   const set = <K extends keyof FeedForm>(key: K, value: FeedForm[K]) => setForm((current) => ({ ...current, [key]: value }));
 
-  if (!isAdmin) {
-    return (
-      <main className="grid min-h-svh place-items-center px-6">
-        <div className="surface-card max-w-md p-8 text-center">
-          <h1 className="font-display text-2xl">Admin access required</h1>
-          <p className="mt-3 text-muted-foreground">Sign in as an administrator before opening the Feed editor.</p>
-          <Button asChild className="mt-6"><Link href="/feed">Back to Feed</Link></Button>
-        </div>
-      </main>
-    );
-  }
+  useEffect(() => {
+    function warnBeforeUnload(event: BeforeUnloadEvent) {
+      if (!hasUnsavedChanges || saved.current) return;
+      event.preventDefault();
+      event.returnValue = "";
+    }
+    window.addEventListener("beforeunload", warnBeforeUnload);
+    return () => window.removeEventListener("beforeunload", warnBeforeUnload);
+  }, [hasUnsavedChanges]);
 
-  function save() {
-    if (!form.title.trim()) return;
-    const payload = { ...form, title: form.title.trim(), slug: slugify(form.slug || form.title), excerpt: form.excerpt.trim() };
-    if (post) updateItem("feeds", post.id, payload);
-    else createItem("feeds", { ...payload, order: posts.length });
+  function leaveEditor() {
+    if (
+      hasUnsavedChanges &&
+      !window.confirm("You have unsaved changes. Are you sure you want to leave?")
+    ) {
+      return;
+    }
+    saved.current = true;
     router.push("/feed");
   }
 
+  async function save(published: boolean) {
+    if (published && !form.title.trim()) return;
+    const title = form.title.trim() || "Untitled draft";
+    const payload = {
+      ...form,
+      published,
+      title,
+      slug: slugify(form.slug || `${title}-${Date.now().toString(36)}`),
+      excerpt: form.excerpt.trim(),
+    };
+    setSaving(true);
+    saved.current = true;
+    try {
+      if (post) await updateItem("feeds", post.id, payload);
+      else await createItem("feeds", { ...payload, order: posts.length });
+      router.push("/feed");
+    } catch {
+      saved.current = false;
+      setSaving(false);
+    }
+  }
+
   return (
-    <main className="flex h-svh flex-col overflow-hidden bg-background pt-24" data-color-mode="dark">
-      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-hairline px-6 py-4 sm:px-8">
+    <main className="feed-editor-shell flex h-svh flex-col overflow-hidden bg-black" data-color-mode="dark">
+      <header className="flex min-h-20 flex-wrap items-center justify-between gap-4 border-b border-hairline bg-black px-6 py-4 sm:px-8">
         <div className="flex items-center gap-4">
-          <Button asChild variant="ghost" size="icon"><Link href="/feed" aria-label="Back to Feed"><ArrowLeft className="size-5" /></Link></Button>
+          <Button type="button" variant="ghost" size="icon" onClick={leaveEditor} aria-label="Back to Feed"><ArrowLeft className="size-5" /></Button>
           <div>
             <p className="font-display text-lg font-medium">{post ? "Edit post" : "New feed post"}</p>
             <p className="text-xs text-muted-foreground">Markdown and MDX supported</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <label className="flex h-10 items-center gap-2 rounded-lg border border-input px-3 text-sm">
-            <input type="checkbox" checked={form.published} onChange={(event) => set("published", event.target.checked)} /> Published
-          </label>
-          <Button type="button" onClick={save}><Save className="size-4" /> Save post</Button>
+          <Button type="button" variant="outline" onClick={() => save(false)} disabled={saving}><Save className="size-4" /> {saving ? "Saving…" : "Save draft"}</Button>
+          <Button type="button" onClick={() => save(true)} disabled={!form.title.trim() || saving}><FileCheck className="size-4" /> Publish</Button>
         </div>
       </header>
 
@@ -87,10 +112,10 @@ export function FeedEditor({ slug }: { slug?: string }) {
             <Input placeholder="Slug (optional)" value={form.slug} onChange={(event) => set("slug", event.target.value)} />
             <textarea placeholder="Short excerpt" value={form.excerpt} onChange={(event) => set("excerpt", event.target.value)} rows={5} className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" />
             <Input type="date" aria-label="Publish date" value={form.date} onChange={(event) => set("date", event.target.value)} />
-            <TagInput value={form.tags} onChange={(tags) => set("tags", tags)} placeholder="Add tags and press Enter" />
+            <TagInput value={form.tags} onChange={(tags) => set("tags", tags)} suggestions={existingTags} placeholder="Add tags and press Enter" />
           </div>
         </aside>
-        <section className="min-h-0 overflow-hidden p-3 sm:p-5">
+        <section className="min-h-0 overflow-hidden bg-black p-3 sm:p-5">
           <div className="h-full overflow-hidden rounded-xl border border-hairline">
             <MarkdownEditor value={form.body} onChange={(value) => set("body", value ?? "")} height="100%" preview="live" />
           </div>
