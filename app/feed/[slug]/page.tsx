@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import { FeedNav } from "@/components/sections/feed-nav";
 import { remarkStyleStrings } from "@/lib/mdx/remark-style-strings";
@@ -39,7 +38,6 @@ export default async function FeedPostPage({ params }: PageProps) {
         remarkPlugins: [remarkGfm, remarkStyleStrings],
         rehypePlugins: [
           rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: "wrap" }],
           [
             rehypePrettyCode,
             {
