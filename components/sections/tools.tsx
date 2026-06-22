@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, X, GripVertical } from "lucide-react";
+import { ChevronDown, Plus, X, GripVertical } from "lucide-react";
 import { useCmsAuth, usePageContext } from "@dalgoridim/headless-cms/client";
 import { Section, Eyebrow, SectionHeading } from "@/components/section";
 import { Reveal } from "@/components/reveal";
@@ -44,6 +44,7 @@ export function Tools() {
   const canEdit = isAdmin && isEditing && live.length > 0;
 
   const [dragId, setDragId] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -93,8 +94,22 @@ export function Tools() {
       </Reveal>
 
       <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((tool, i) => (
-          <Reveal key={tool.id} delay={(i % 3) * 60}>
+        {items.map((tool, i) => {
+          const collapsedClass =
+            showAll || canEdit || i < 4
+              ? undefined
+              : i < 8
+                ? "hidden sm:block"
+                : i < 12
+                  ? "hidden lg:block"
+                  : "hidden";
+
+          return (
+          <Reveal
+            key={tool.id}
+            delay={(i % 3) * 60}
+            className={collapsedClass}
+          >
             <div
               draggable={canEdit}
               onDragStart={() => setDragId(tool.id)}
@@ -149,7 +164,8 @@ export function Tools() {
               )}
             </div>
           </Reveal>
-        ))}
+          );
+        })}
 
         {canEdit && (
           <button
@@ -161,6 +177,41 @@ export function Tools() {
           </button>
         )}
       </div>
+
+      {!showAll && !canEdit && (
+        <div className="mt-8 flex justify-center">
+          {items.length > 4 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowAll(true)}
+              className="sm:hidden"
+            >
+              Show more <ChevronDown className="size-4" />
+            </Button>
+          )}
+          {items.length > 8 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowAll(true)}
+              className="hidden sm:inline-flex lg:hidden"
+            >
+              Show more <ChevronDown className="size-4" />
+            </Button>
+          )}
+          {items.length > 12 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowAll(true)}
+              className="hidden lg:inline-flex"
+            >
+              Show more <ChevronDown className="size-4" />
+            </Button>
+          )}
+        </div>
+      )}
 
       {isAdmin && isEditing && live.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">

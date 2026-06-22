@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const siteConfig = {
   name: "Daniel Fadamitan",
-  title: "Daniel Fadamitan — Frontend Developer",
+  title: "Daniel Fadamitan | Frontend Developer",
   description:
     "Nigeria-based frontend developer building accessible, high-performing web and mobile experiences with React, Next.js, and TypeScript.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://dalgoridim.com",
@@ -16,7 +16,10 @@ export function absoluteUrl(path = "/") {
 }
 
 export function summarize(value: string, maxLength = 160) {
-  const plain = value.replace(/[#*_>`\[\]()~-]/g, "").replace(/\s+/g, " ").trim();
+  const plain = value
+    .replace(/[#*_>`\[\]()~-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (plain.length <= maxLength) return plain;
   return `${plain.slice(0, maxLength - 1).trimEnd()}…`;
 }
