@@ -50,7 +50,7 @@ export function ProjectContentEditor({ slug }: { slug: string }) {
       return;
     }
     saved.current = true;
-    router.push(project?.slug ? `/projects/${project.slug}` : "/projects");
+    router.push(project?.slug ? `/p/${project.slug}` : "/projects");
   }
 
   async function save() {
@@ -96,7 +96,7 @@ export function ProjectContentEditor({ slug }: { slug: string }) {
         <div className="flex items-center gap-3">
           {project.slug && (
             <Button asChild type="button" variant="outline">
-              <Link href={`/projects/${project.slug}`} target="_blank" rel="noopener noreferrer">
+              <Link href={`/p/${project.slug}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="size-4" /> View
               </Link>
             </Button>

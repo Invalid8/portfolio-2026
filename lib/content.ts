@@ -26,7 +26,7 @@ export type Tool = {
 
 export type Project = {
   id: string;
-  /** URL slug for the optional case-study page (`/projects/[slug]`). */
+  /** URL slug for the optional case-study page (`/p/[slug]`). */
   slug: string;
   title: string;
   description: string;

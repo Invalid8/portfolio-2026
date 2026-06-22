@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projects
       .filter((project) => project.slug)
       .map((project) => ({
-        url: absoluteUrl(`/projects/${encodeURIComponent(project.slug)}`),
+        url: absoluteUrl(`/p/${encodeURIComponent(project.slug)}`),
         lastModified: toIsoDate(project.date),
         changeFrequency: "monthly" as const,
         priority: 0.8,
@@ -41,7 +41,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           : {}),
       })),
     ...posts.map((post) => ({
-      url: absoluteUrl(`/feed/${encodeURIComponent(post.slug)}`),
+      url: absoluteUrl(`/f/${encodeURIComponent(post.slug)}`),
       lastModified: toIsoDate(post.date),
       changeFrequency: "monthly" as const,
       priority: 0.7,

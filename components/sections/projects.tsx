@@ -240,7 +240,7 @@ export function Projects({
                     <h3 className="font-display text-lg font-medium tracking-tight">
                       {p.slug ? (
                         <Link
-                          href={`/projects/${p.slug}`}
+                          href={`/p/${p.slug}`}
                           className="transition-colors hover:text-lime"
                         >
                           {p.title}
@@ -403,7 +403,7 @@ export function Projects({
                   <div className="mt-8 flex flex-wrap gap-3">
                     {detail.content?.trim() && detail.slug && (
                       <Button asChild size="lg">
-                        <Link href={`/projects/${detail.slug}`}>
+                        <Link href={`/p/${detail.slug}`}>
                           Read case study <BookOpen className="size-4" />
                         </Link>
                       </Button>

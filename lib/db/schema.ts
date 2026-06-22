@@ -44,7 +44,7 @@ export const principles = pgTable("principles", {
 /** Project cards — an editable, reorderable list. */
 export const projects = pgTable("projects", {
   id: text("id").primaryKey(),
-  // URL slug for the optional case-study page (`/projects/[slug]`).
+  // URL slug for the optional case-study page (`/p/[slug]`).
   slug: text("slug").unique(),
   title: text("title"),
   description: text("description"),

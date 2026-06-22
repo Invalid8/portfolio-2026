@@ -1,4 +1,4 @@
-export default function FeedPostLoading() {
+export default function FeedArticleLoading() {
   return (
     <main className="mx-auto min-h-svh w-full max-w-4xl animate-pulse px-6 pt-36">
       <div className="h-4 w-32 rounded bg-surface-2" />

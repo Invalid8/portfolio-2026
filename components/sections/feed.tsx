@@ -212,7 +212,7 @@ export function Feed() {
             </div>
             <div className="mt-auto flex items-end justify-between gap-4 pt-8">
               <Link
-                href={`/feed/${post.slug}`}
+                href={`/f/${post.slug}`}
                 className="inline-flex items-center gap-2 text-sm transition-colors hover:text-lime"
               >
                 Open post <ArrowUpRight className="size-4" />
