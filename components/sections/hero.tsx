@@ -1,14 +1,35 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
 import { hero, owner, tools } from "@/lib/content";
+import { ADMIN_LOGIN_EVENT } from "@/lib/admin-login-event";
 
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
 const heroStack = tools;
 
 export function Hero() {
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const didLongPress = useRef(false);
+
+  function startAdminHold() {
+    didLongPress.current = false;
+    holdTimer.current = setTimeout(() => {
+      didLongPress.current = true;
+      window.dispatchEvent(new Event(ADMIN_LOGIN_EVENT));
+      navigator.vibrate?.(30);
+    }, 700);
+  }
+
+  function cancelAdminHold() {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    holdTimer.current = null;
+  }
+
   return (
     <section
       id="home"
@@ -58,7 +79,21 @@ export function Hero() {
             variant="outline"
             className="h-12 rounded-xl px-7 text-sm"
           >
-            <Link href="#work">View work</Link>
+            <Link
+              href="#work"
+              onPointerDown={startAdminHold}
+              onPointerUp={cancelAdminHold}
+              onPointerCancel={cancelAdminHold}
+              onPointerLeave={cancelAdminHold}
+              onContextMenu={(event) => event.preventDefault()}
+              onClick={(event) => {
+                if (!didLongPress.current) return;
+                event.preventDefault();
+                didLongPress.current = false;
+              }}
+            >
+              View work
+            </Link>
           </Button>
         </div>
       </Reveal>

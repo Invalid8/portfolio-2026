@@ -8,7 +8,7 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://dalgoridim.com",
   locale: "en_NG",
   twitter: "@D_Invalid1",
-  defaultOgImage: "/images/og/home.png",
+  defaultOgImage: "/opengraph-image",
 } as const;
 
 export function absoluteUrl(path = "/") {

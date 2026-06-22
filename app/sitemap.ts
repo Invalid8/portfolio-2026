@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getFeedPosts } from "@/lib/cms/feed";
 import { getProjects } from "@/lib/cms/projects";
-import { absoluteUrl, toIsoDate } from "@/lib/seo";
+import { absoluteUrl, siteConfig, toIsoDate } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, projects] = await Promise.all([getFeedPosts(), getProjects()]);
@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: absoluteUrl("/"),
       changeFrequency: "monthly",
       priority: 1,
-      images: [absoluteUrl("/images/og/home.png")],
+      images: [absoluteUrl(siteConfig.defaultOgImage)],
     },
     {
       url: absoluteUrl("/projects"),

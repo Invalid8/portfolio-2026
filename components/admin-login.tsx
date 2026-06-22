@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ADMIN_LOGIN_EVENT } from "@/lib/admin-login-event";
 
 /**
  * Hidden admin sign-in via Google (built on `@react-oauth/google`). No visible
@@ -34,7 +35,7 @@ export function AdminLogin() {
 }
 
 /** ⌘/Ctrl + Shift + . — summon the admin dialog. */
-function useSummonShortcut(onSummon: () => void) {
+function useAdminSummon(onSummon: () => void) {
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (!((e.metaKey || e.ctrlKey) && e.shiftKey)) return;
@@ -52,14 +53,23 @@ function useSummonShortcut(onSummon: () => void) {
       e.preventDefault();
       onSummon();
     }
+
+    function onTrigger() {
+      onSummon();
+    }
+
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener(ADMIN_LOGIN_EVENT, onTrigger);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener(ADMIN_LOGIN_EVENT, onTrigger);
+    };
   }, [onSummon]);
 }
 
 /** Not configured: the shortcut still responds, with a helpful toast. */
 function AdminLoginDisabled() {
-  useSummonShortcut(() =>
+  useAdminSummon(() =>
     toast.error("Admin login unavailable", {
       description:
         "Set NEXT_PUBLIC_GOOGLE_CLIENT_ID in .env and restart the dev server.",
@@ -73,7 +83,7 @@ function AdminLoginInner() {
   const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  useSummonShortcut(() => setOpen((v) => !v));
+  useAdminSummon(() => setOpen((v) => !v));
 
   function onLogout() {
     setLoggingOut(true);
