@@ -4,11 +4,14 @@ import { Projects } from "@/components/sections/projects";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Projects — Daniel Fadamitan",
-  description: "Selected frontend, mobile, and product engineering work by Daniel Fadamitan.",
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Projects",
+  description:
+    "Selected frontend, mobile, and product engineering work by Daniel Fadamitan.",
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   return (

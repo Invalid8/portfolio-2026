@@ -4,11 +4,14 @@ import { FeedFooter } from "@/components/sections/feed-footer";
 import { Feed } from "@/components/sections/feed";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
+import { createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Feed — Daniel Fadamitan",
-  description: "Serious engineering notes, unserious observations, and everything in between.",
-};
+export const metadata: Metadata = createPageMetadata({
+  title: "Feed",
+  description:
+    "Frontend engineering notes, lessons from shipping products, experiments, and useful observations by Daniel Fadamitan.",
+  path: "/feed",
+});
 
 export default function FeedPage() {
   return (

@@ -8,8 +8,10 @@ import { FeedFooter } from "@/components/sections/feed-footer";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/json-ld";
 import { getProject } from "@/lib/cms/projects";
 import { formatMonthYear } from "@/lib/format";
+import { absoluteUrl, siteConfig, summarize, toIsoDate } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -18,10 +20,38 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Project not found" };
+  if (!project) {
+    return {
+      title: "Project not found",
+      robots: { index: false, follow: false },
+    };
+  }
+  const path = `/projects/${encodeURIComponent(slug)}`;
+  const description = summarize(project.description);
+  const image = absoluteUrl(`${path}/opengraph-image`);
+
   return {
-    title: `${project.title} — Daniel Fadamitan`,
-    description: project.description,
+    title: project.title,
+    description,
+    keywords: project.tags,
+    alternates: { canonical: absoluteUrl(path) },
+    openGraph: {
+      type: "article",
+      locale: siteConfig.locale,
+      url: absoluteUrl(path),
+      siteName: siteConfig.name,
+      title: project.title,
+      description,
+      tags: project.tags,
+      images: [{ url: image, width: 1200, height: 630, alt: project.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: siteConfig.twitter,
+      title: project.title,
+      description,
+      images: [image],
+    },
   };
 }
 
@@ -31,9 +61,28 @@ export default async function ProjectPage({ params }: PageProps) {
   if (!project) notFound();
 
   const hasCaseStudy = Boolean(project.content && project.content.trim());
+  const projectUrl = absoluteUrl(`/projects/${encodeURIComponent(slug)}`);
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: project.title,
+          description: summarize(project.description),
+          url: projectUrl,
+          image: project.thumbnail || undefined,
+          dateCreated: toIsoDate(project.date),
+          keywords: project.tags.join(", "),
+          creator: {
+            "@type": "Person",
+            name: siteConfig.name,
+            url: siteConfig.url,
+          },
+          sameAs: [project.link, project.github].filter(Boolean),
+        }}
+      />
       <FeedNav backHref="/projects" backLabel="Back to projects" />
       <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-6 pt-20 pb-24">
         <header className="mt-12 border-b border-hairline pb-10">
