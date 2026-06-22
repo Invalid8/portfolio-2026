@@ -108,7 +108,7 @@ export function ProjectContentEditor({ slug }: { slug: string }) {
       </header>
 
       <section className="min-h-0 flex-1 overflow-hidden bg-black p-3 sm:p-5">
-        <div className="mx-auto h-full max-w-5xl overflow-hidden rounded-xl border border-hairline">
+        <div className="h-full overflow-hidden rounded-xl border border-hairline">
           <MarkdownEditor value={body} onChange={(value) => setBody(value ?? "")} height="100%" preview="live" />
         </div>
       </section>
