@@ -1,10 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   AnonymousEditProvider,
   PageProvider,
+  useCmsAuth,
   type Notifier,
   type ItemMap,
 } from "@dalgoridim/headless-cms/client";
@@ -16,6 +17,30 @@ const notify: Notifier = {
   success: (m) => toast.success(m),
   error: (m) => toast.error(m),
 };
+
+const editModeStorageKey = "portfolio:edit-mode";
+
+function PersistEditMode() {
+  const { isEditing, toggleEdit } = useCmsAuth();
+  const hydrated = useRef(false);
+
+  useEffect(() => {
+    if (!hydrated.current) {
+      hydrated.current = true;
+
+      if (sessionStorage.getItem(editModeStorageKey) === "true" && !isEditing) {
+        toggleEdit();
+      }
+
+      return;
+    }
+
+    sessionStorage.setItem(editModeStorageKey, String(isEditing));
+  }, [isEditing, toggleEdit]);
+
+  return null;
+}
+
 export function Providers({
   children,
   initialItems,
@@ -30,6 +55,7 @@ export function Providers({
       storage={storage}
       notify={notify}
     >
+      <PersistEditMode />
       {children}
     </PageProvider>
   );

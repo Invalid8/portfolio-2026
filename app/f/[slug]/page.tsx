@@ -121,7 +121,7 @@ export default async function FeedPostPage({ params }: PageProps) {
         </article>
       </main>
       <FeedFooter />
-      <AdminBar />
+      <AdminBar showEdit={false} />
       <AdminLogin />
     </>
   );

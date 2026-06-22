@@ -143,7 +143,7 @@ export default async function ProjectPage({ params }: PageProps) {
         )}
       </main>
       <FeedFooter />
-      <AdminBar />
+      <AdminBar showEdit={false} />
       <AdminLogin />
     </>
   );
