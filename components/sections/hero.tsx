@@ -6,17 +6,7 @@ import { EditableText } from "@/components/editable/editable-text";
 import { hero, owner, tools } from "@/lib/content";
 
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
-const heroStack = tools.filter((t) =>
-  [
-    "typescript",
-    "react",
-    "nextjs",
-    "tailwind",
-    "node",
-    "figma",
-    "git",
-  ].includes(t.key),
-);
+const heroStack = tools;
 
 export function Hero() {
   return (
@@ -54,7 +44,11 @@ export function Hero() {
       <Reveal delay={240}>
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Button asChild size="lg" className="h-12 rounded-xl px-7 text-sm">
-            <Link href={owner.calendar} target="_blank" rel="noopener noreferrer">
+            <Link
+              href={owner.calendar}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Let&apos;s talk <ArrowUpRight className="size-4" />
             </Link>
           </Button>
