@@ -15,6 +15,13 @@
       "when": 1782085443940,
       "tag": "0001_fixed_micromacro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782096342911,
+      "tag": "0002_skinny_jack_murdock",
+      "breakpoints": true
     }
   ]
 }

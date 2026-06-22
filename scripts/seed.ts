@@ -36,15 +36,17 @@ async function main() {
   // Projects: full typed rows (year/order numeric columns; tags a text[] column).
   for (const [i, p] of projects.entries()) {
     await data.upsert("projects", p.id, {
+      slug: p.slug,
       title: p.title,
       description: p.description,
       thumbnail: p.thumbnail,
       link: p.link,
       github: p.github ?? "",
-      date: `${p.year}-01`,
+      date: p.date ?? `${p.year}-01`,
       year: Number(p.year),
       order: i,
       tags: p.tags,
+      content: p.content ?? "",
     });
   }
   console.log(`✅ ${projects.length} projects`);

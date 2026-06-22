@@ -21,7 +21,7 @@ export default function Home() {
         <About />
         <Services />
         <Tools />
-        <Projects />
+        <Projects limit={6} />
         <Experience />
         <Approach />
         {/* <Testimonials />

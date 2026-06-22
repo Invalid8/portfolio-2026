@@ -48,6 +48,8 @@ export const principles = pgTable("principles", {
 /** Project cards — an editable, reorderable list. */
 export const projects = pgTable("projects", {
   id: text("id").primaryKey(),
+  // URL slug for the optional case-study page (`/projects/[slug]`).
+  slug: text("slug").unique(),
   title: text("title"),
   description: text("description"),
   thumbnail: text("thumbnail"),
@@ -58,6 +60,8 @@ export const projects = pgTable("projects", {
   year: integer("year"),
   order: integer("order"),
   tags: text("tags").array(),
+  // Optional Markdown/MDX case study rendered on the project detail page.
+  content: text("content"),
   ...stamps,
 });
 

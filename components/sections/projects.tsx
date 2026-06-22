@@ -9,6 +9,7 @@ import {
   Pencil,
   ArrowUpRight,
   Code2,
+  BookOpen,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -31,6 +32,7 @@ import { formatMonthYear } from "@/lib/format";
 
 type ProjectItem = {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -39,18 +41,21 @@ type ProjectItem = {
   date?: string;
   year?: string | number;
   tags: string[];
+  content?: string;
   order?: number;
 };
 
 const fallback: ProjectItem[] = staticProjects.map((p, i) => ({
   id: p.id,
+  slug: p.slug,
   title: p.title,
   description: p.description,
   thumbnail: p.thumbnail,
   link: p.link,
   github: p.github,
-  date: `${p.year}-01`,
+  date: p.date ?? `${p.year}-01`,
   tags: p.tags,
+  content: p.content,
   order: i,
 }));
 
@@ -80,10 +85,13 @@ export function Projects({
   showViewAll = true,
   title = "Featured",
   highlight = "projects",
+  limit,
 }: {
   showViewAll?: boolean;
   title?: string;
   highlight?: string;
+  /** Cap the number of project cards shown (e.g. the landing page). */
+  limit?: number;
 } = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const { items: cmsItems, createItem, updateItem, deleteItem, reorderItems } =
@@ -92,6 +100,9 @@ export function Projects({
   const live = (cmsItems.projects as ProjectItem[] | undefined) ?? [];
   const items = live.length ? live : fallback;
   const canEdit = isAdmin && isEditing && live.length > 0;
+  // Don't truncate while editing, so admins can still reorder/delete the full set.
+  const visibleItems =
+    typeof limit === "number" && !canEdit ? items.slice(0, limit) : items;
 
   const [dragId, setDragId] = useState<string | null>(null);
   const [detail, setDetail] = useState<ProjectItem | null>(null);
@@ -169,7 +180,7 @@ export function Projects({
       </Reveal>
 
       <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {items.map((p, i) => (
+        {visibleItems.map((p, i) => (
           <Reveal key={p.id} delay={(i % 2) * 100} className="h-full">
             <article
               draggable={canEdit}
@@ -333,8 +344,22 @@ export function Projects({
                     ))}
                   </div>
                   <div className="mt-8 flex flex-wrap gap-3">
-                    {detail.link && <Button asChild size="lg"><Link href={detail.link} target="_blank" rel="noopener noreferrer">Visit project <ArrowUpRight className="size-4" /></Link></Button>}
+                    {detail.content?.trim() && detail.slug && (
+                      <Button asChild size="lg">
+                        <Link href={`/projects/${detail.slug}`}>
+                          Read case study <BookOpen className="size-4" />
+                        </Link>
+                      </Button>
+                    )}
+                    {detail.link && <Button asChild size="lg" variant={detail.content?.trim() ? "outline" : "default"}><Link href={detail.link} target="_blank" rel="noopener noreferrer">Visit project <ArrowUpRight className="size-4" /></Link></Button>}
                     {detail.github && <Button asChild size="lg" variant="outline"><Link href={detail.github} target="_blank" rel="noopener noreferrer"><Code2 className="size-4" /> Source</Link></Button>}
+                    {canEdit && detail.slug && (
+                      <Button asChild size="lg" variant="outline">
+                        <Link href={`/projects/${detail.slug}/edit`}>
+                          <Pencil className="size-4" /> {detail.content?.trim() ? "Edit case study" : "Write case study"}
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                   <div className="mt-8 flex items-center justify-between border-t border-hairline pt-5 md:hidden">
                     <Button type="button" variant="ghost" onClick={() => previousProject && setDetail(previousProject)} disabled={items.length < 2}><ChevronLeft className="size-4" /> Previous</Button>

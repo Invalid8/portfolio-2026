@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { compileMDX } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
-import rehypeSlug from "rehype-slug";
-import rehypePrettyCode from "rehype-pretty-code";
 import { FeedNav } from "@/components/sections/feed-nav";
-import { remarkStyleStrings } from "@/lib/mdx/remark-style-strings";
+import { Markdown } from "@/components/markdown";
 import { FeedFooter } from "@/components/sections/feed-footer";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
@@ -30,27 +26,6 @@ export default async function FeedPostPage({ params }: PageProps) {
   const post = await getFeedPost(slug);
   if (!post) notFound();
 
-  const { content } = await compileMDX({
-    source: post.body,
-    options: {
-      parseFrontmatter: true,
-      mdxOptions: {
-        remarkPlugins: [remarkGfm, remarkStyleStrings],
-        rehypePlugins: [
-          rehypeSlug,
-          [
-            rehypePrettyCode,
-            {
-              theme: "github-dark-default",
-              keepBackground: false,
-              defaultLang: "plaintext",
-            },
-          ],
-        ],
-      },
-    },
-  });
-
   return (
     <>
       <FeedNav />
@@ -74,7 +49,9 @@ export default async function FeedPostPage({ params }: PageProps) {
             {post.excerpt}
           </p>
         </header>
-        <article className="feed-prose mt-12">{content}</article>
+        <article className="feed-prose mt-12">
+          <Markdown source={post.body} />
+        </article>
       </main>
       <FeedFooter />
       <AdminBar />
