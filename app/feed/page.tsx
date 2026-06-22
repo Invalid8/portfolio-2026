@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SiteNav } from "@/components/sections/site-nav";
-import { SiteFooter } from "@/components/sections/site-footer";
+import { FeedFooter } from "@/components/sections/feed-footer";
 import { Feed } from "@/components/sections/feed";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
@@ -17,7 +17,7 @@ export default function FeedPage() {
       <main className="flex-1 pt-24">
         <Feed />
       </main>
-      <SiteFooter />
+      <FeedFooter />
       <AdminBar />
       <AdminLogin />
     </>

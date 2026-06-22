@@ -6,8 +6,9 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrettyCode from "rehype-pretty-code";
 import { SiteNav } from "@/components/sections/site-nav";
-import { SiteFooter } from "@/components/sections/site-footer";
+import { FeedFooter } from "@/components/sections/feed-footer";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { getFeedPost } from "@/lib/cms/feed";
@@ -35,7 +36,18 @@ export default async function FeedPostPage({ params }: PageProps) {
       parseFrontmatter: true,
       mdxOptions: {
         remarkPlugins: [remarkGfm],
-        rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]],
+        rehypePlugins: [
+          rehypeSlug,
+          [rehypeAutolinkHeadings, { behavior: "wrap" }],
+          [
+            rehypePrettyCode,
+            {
+              theme: "github-dark-default",
+              keepBackground: false,
+              defaultLang: "plaintext",
+            },
+          ],
+        ],
       },
     },
   });
@@ -61,7 +73,7 @@ export default async function FeedPostPage({ params }: PageProps) {
         </header>
         <article className="feed-prose mt-12">{content}</article>
       </main>
-      <SiteFooter />
+      <FeedFooter />
       <AdminBar />
       <AdminLogin />
     </>

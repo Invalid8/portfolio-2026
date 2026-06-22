@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowUpRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
@@ -35,8 +35,8 @@ export function SiteFooter() {
             </EditableText>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="rounded-full px-5">
-                <Link href={`mailto:${owner.email}`}>
-                  <Mail className="size-4" /> Start a project
+                <Link href={owner.calendar} target="_blank" rel="noopener noreferrer">
+                  <Calendar className="size-4" /> Book a meeting
                 </Link>
               </Button>
               <Button

@@ -303,6 +303,44 @@
   padding: 1.25rem;
 }
 .feed-prose pre code { font-family: var(--font-mono); font-size: 0.9rem; }
+.feed-prose figure[data-rehype-pretty-code-figure] {
+  margin-block: 2rem;
+}
+.feed-prose figure[data-rehype-pretty-code-figure] pre {
+  margin: 0;
+  background: #0d0d0f !important;
+  padding: 1.35rem 0;
+}
+.feed-prose figure[data-rehype-pretty-code-figure] code {
+  display: grid;
+  min-width: max-content;
+  counter-reset: line;
+}
+.feed-prose figure[data-rehype-pretty-code-figure] [data-line] {
+  display: inline-block;
+  min-height: 1.65rem;
+  padding-inline: 1.35rem;
+}
+.feed-prose figure[data-rehype-pretty-code-figure] [data-line]:hover {
+  background: color-mix(in oklab, var(--surface-2) 75%, transparent);
+}
+.feed-prose figure[data-rehype-pretty-code-figure] [data-highlighted-line] {
+  border-left: 2px solid var(--lime);
+  background: color-mix(in oklab, var(--lime) 8%, transparent);
+}
+.feed-prose figure[data-rehype-pretty-code-figure] figcaption {
+  border: 1px solid var(--hairline);
+  border-bottom: 0;
+  border-radius: 0.875rem 0.875rem 0 0;
+  background: var(--surface);
+  padding: 0.65rem 1rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.feed-prose figure[data-rehype-pretty-code-figure] figcaption + pre {
+  border-radius: 0 0 0.875rem 0.875rem;
+}
 .feed-prose img { border-radius: 0.875rem; }
 .feed-prose hr { border-color: var(--hairline); margin-block: 3rem; }
 

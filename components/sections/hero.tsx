@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { hero, tools } from "@/lib/content";
+import { hero, owner, tools } from "@/lib/content";
 
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
 const heroStack = tools.filter((t) =>
@@ -54,7 +54,7 @@ export function Hero() {
       <Reveal delay={240}>
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Button asChild size="lg" className="h-12 rounded-xl px-7 text-sm">
-            <Link href="#contact">
+            <Link href={owner.calendar} target="_blank" rel="noopener noreferrer">
               Let&apos;s talk <ArrowUpRight className="size-4" />
             </Link>
           </Button>

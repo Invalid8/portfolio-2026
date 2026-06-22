@@ -55,7 +55,7 @@ export function SiteNav() {
               variant="secondary"
               className="hidden h-11 rounded-xl border border-hairline px-6 text-sm sm:inline-flex"
             >
-              <Link href="#contact">
+              <Link href={owner.calendar} target="_blank" rel="noopener noreferrer">
                 Let&apos;s talk <ArrowUpRight className="size-3.5" />
               </Link>
             </Button>
@@ -95,7 +95,7 @@ export function SiteNav() {
               ))}
             </ul>
             <Button asChild size="lg" className="mt-1 w-full rounded-xl">
-              <Link href="#contact" onClick={() => setOpen(false)}>
+              <Link href={owner.calendar} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
                 Let&apos;s talk <ArrowUpRight className="size-4" />
               </Link>
             </Button>
