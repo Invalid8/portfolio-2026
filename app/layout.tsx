@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bricolage_Grotesque, Allura } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
 import { fetchItems } from "@/lib/cms/data";
@@ -108,6 +109,7 @@ export default async function RootLayout({
       >
         <Providers initialItems={initialItems}>{children}</Providers>
         <Toaster position="bottom-right" />
+        <Analytics />
       </body>
     </html>
   );
