@@ -533,27 +533,27 @@ export function Projects({
               rows={3}
               className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
-            <div className="flex gap-2.5">
-              <Input
-                type="url"
-                placeholder="Live URL (https://…)"
-                value={form.link}
-                onChange={(e) => set("link")(e.target.value)}
-              />
-              <Input
-                type="month"
-                aria-label="Project date"
-                value={form.date}
-                onChange={(e) => set("date")(e.target.value)}
-                className="w-40 shrink-0"
-              />
-            </div>
+            <Input
+              type="url"
+              placeholder="Live URL (https://…)"
+              value={form.link}
+              onChange={(e) => set("link")(e.target.value)}
+            />
             <Input
               type="url"
               placeholder="GitHub URL (https://…)"
               value={form.github}
               onChange={(e) => set("github")(e.target.value)}
             />
+            <label className="flex flex-col gap-1.5 font-mono text-xs text-muted-foreground">
+              Month &amp; year
+              <Input
+                type="month"
+                aria-label="Project month and year"
+                value={form.date}
+                onChange={(e) => set("date")(e.target.value)}
+              />
+            </label>
             <TagInput
               value={form.tags}
               onChange={set("tags")}

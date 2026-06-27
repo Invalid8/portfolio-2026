@@ -8,6 +8,7 @@ import { usePageContext } from "@dalgoridim/headless-cms/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TagInput } from "@/components/ui/tag-input";
+import { slugify, uniqueSlug } from "@/lib/slug";
 import type { FeedItem } from "@/components/sections/feed";
 
 const MarkdownEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
@@ -25,10 +26,6 @@ const blank = (): FeedForm => ({
   tags: [],
   published: true,
 });
-
-function slugify(value: string) {
-  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
 
 export function FeedEditor({ slug }: { slug?: string }) {
   const router = useRouter();
@@ -78,11 +75,14 @@ export function FeedEditor({ slug }: { slug?: string }) {
     if (!hasContent) return;
     if (published && !form.title.trim()) return;
     const title = form.title.trim() || "Untitled draft";
+    const takenSlugs = posts
+      .filter((item) => item.id !== postId)
+      .map((item) => item.slug);
     const payload = {
       ...form,
       published,
       title,
-      slug: slugify(form.slug || `${title}-${Date.now().toString(36)}`),
+      slug: uniqueSlug(slugify(form.slug || title), takenSlugs),
       excerpt: form.excerpt.trim(),
     };
     setSaving(true);

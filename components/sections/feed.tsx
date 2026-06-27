@@ -26,6 +26,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { feedPosts as staticPosts } from "@/lib/content";
+import { slugify, uniqueSlug } from "@/lib/slug";
 
 const MarkdownEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -98,10 +99,10 @@ export function Feed({
   async function createRant(published: boolean) {
     if ((published && !rantTitle.trim()) || !rantBody.trim()) return;
     const title = rantTitle.trim() || "Untitled draft";
-    const slug = `${title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")}-${Date.now().toString(36)}`;
+    const slug = uniqueSlug(
+      slugify(title),
+      items.map((item) => item.slug),
+    );
     const excerpt = rantBody
       .replace(/[#*_>`\[\]()~-]/g, "")
       .replace(/\s+/g, " ")
