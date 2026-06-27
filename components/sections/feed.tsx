@@ -105,7 +105,7 @@ export function Feed() {
         date: new Date().toISOString().slice(0, 10),
         tags: [...new Set(["Rant", ...rantTags])],
         published,
-        order: items.length,
+        order: items.reduce((max, item) => Math.max(max, (item.order ?? -1) + 1), 0),
       });
     } catch {
       return;

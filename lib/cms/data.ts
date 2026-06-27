@@ -1,4 +1,5 @@
 import "server-only";
+import { connection } from "next/server";
 import type { ItemMap } from "@dalgoridim/headless-cms";
 import { loadItemMap, type ItemMapLoadConfig } from "@dalgoridim/headless-cms/server";
 import { getDataAdapter } from "./server";
@@ -22,6 +23,11 @@ const LIST_COLLECTIONS: Record<string, { field: string; direction: "asc" | "desc
  * list collections come back sorted, or `[]` so components use static fallbacks.
  */
 export async function fetchItems(): Promise<ItemMap> {
+  // Postgres reads complete during prerender, which would freeze every page to
+  // build-time content (e.g. feeds added later never appear). `connection()`
+  // excludes callers from prerendering so each request reflects the live DB.
+  await connection();
+
   const defaults = defaultItems();
   const collections: ItemMapLoadConfig = Object.fromEntries([
     ...Object.entries(defaults).map(([collection, items]) => [

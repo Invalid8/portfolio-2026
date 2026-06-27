@@ -90,7 +90,11 @@ export function FeedEditor({ slug }: { slug?: string }) {
     try {
       if (postId) await updateItem("feeds", postId, payload);
       else {
-        const newId = await createItem("feeds", { ...payload, order: posts.length });
+        const nextOrder = posts.reduce(
+          (max, item) => Math.max(max, (item.order ?? -1) + 1),
+          0,
+        );
+        const newId = await createItem("feeds", { ...payload, order: nextOrder });
         setPostId(newId);
       }
       setCurrentlyPublished(published);
