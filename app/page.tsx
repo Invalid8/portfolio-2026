@@ -5,6 +5,7 @@ import { Services } from "@/components/sections/services";
 import { Tools } from "@/components/sections/tools";
 import { Projects } from "@/components/sections/projects";
 import { Experience } from "@/components/sections/experience";
+import { Feed } from "@/components/sections/feed";
 import { Approach } from "@/components/sections/approach";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { AdminBar } from "@/components/admin-bar";
@@ -49,6 +50,7 @@ export default function Home() {
         <Tools />
         <Projects limit={6} />
         <Experience />
+        <Feed showViewAll limit={2} />
         <Approach />
       </main>
       <SiteFooter />

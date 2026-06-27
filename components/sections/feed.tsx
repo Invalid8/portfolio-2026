@@ -48,7 +48,15 @@ const fallback: FeedItem[] = staticPosts.map((post, order) => ({
   order,
 }));
 
-export function Feed() {
+export function Feed({
+  showViewAll = false,
+  limit,
+}: {
+  /** Render a "View all" link to /feed instead of the admin Create menu. */
+  showViewAll?: boolean;
+  /** Cap the number of cards shown (e.g. the landing-page teaser). */
+  limit?: number;
+} = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const {
     items: cmsItems,
@@ -59,9 +67,12 @@ export function Feed() {
   const live = (cmsItems.feeds as FeedItem[] | undefined) ?? [];
   const items = live.length ? live : fallback;
   const canEdit = isAdmin && isEditing;
-  const canCreate = isAdmin;
+  const canCreate = isAdmin && !showViewAll;
   const canManage = canEdit && live.length > 0;
-  const visibleItems = canEdit ? items : items.filter((item) => item.published);
+  const published = canEdit ? items : items.filter((item) => item.published);
+  // Don't truncate while editing, so admins can still reorder/delete the full set.
+  const visibleItems =
+    typeof limit === "number" && !canEdit ? published.slice(0, limit) : published;
   const [dragId, setDragId] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [rantOpen, setRantOpen] = useState(false);
@@ -128,6 +139,13 @@ export function Feed() {
             learn between shipping one thing and breaking another.
           </p>
         </div>
+        {showViewAll && (
+          <Button asChild size="lg" className="rounded-full px-5">
+            <Link href="/feed">
+              View all <ArrowUpRight className="size-4" />
+            </Link>
+          </Button>
+        )}
         {canCreate && (
           <div className="relative">
             <Button
