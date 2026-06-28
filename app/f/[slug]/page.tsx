@@ -7,10 +7,19 @@ import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButton } from "@/components/share-button";
-import { getFeedPost } from "@/lib/cms/feed";
+import { getFeedPost, getFeedPosts } from "@/lib/cms/feed";
 import { absoluteUrl, siteConfig, summarize, toIsoDate } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
+
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const posts = await getFeedPosts();
+  return posts
+    .filter((post) => typeof post.slug === "string" && post.slug.length > 0)
+    .map((post) => ({ slug: post.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -88,15 +97,15 @@ export default async function FeedPostPage({ params }: PageProps) {
         }}
       />
       <FeedNav />
-      <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-6 pt-20 pb-24">
+      <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-5 pt-20 pb-24 sm:px-6">
         <header className="mt-12 border-b border-hairline pb-10">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex min-w-0 flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
               <time dateTime={post.date}>{post.date}</time>
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-hairline px-2.5 py-1"
+                  className="max-w-full break-words rounded-full border border-hairline px-2.5 py-1"
                 >
                   {tag}
                 </span>
@@ -106,13 +115,13 @@ export default async function FeedPostPage({ params }: PageProps) {
               title={post.title}
               text={post.excerpt}
               url={postUrl}
-              className="shrink-0"
+              className="shrink-0 self-start"
             />
           </div>
-          <h1 className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.04em] sm:text-7xl">
+          <h1 className="mt-6 text-balance break-words font-display text-4xl font-medium leading-[1.04] tracking-tight sm:text-7xl">
             {post.title}
           </h1>
-          <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
+          <p className="mt-6 break-words text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {post.excerpt}
           </p>
         </header>

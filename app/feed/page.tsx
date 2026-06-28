@@ -13,6 +13,8 @@ export const metadata: Metadata = createPageMetadata({
   path: "/feed",
 });
 
+export const revalidate = 300;
+
 export default function FeedPage() {
   return (
     <>

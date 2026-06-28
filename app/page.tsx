@@ -14,6 +14,8 @@ import { JsonLd } from "@/components/json-ld";
 import { owner, socials } from "@/lib/content";
 import { siteConfig } from "@/lib/seo";
 
+export const revalidate = 300;
+
 export default function Home() {
   return (
     <>

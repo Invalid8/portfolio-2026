@@ -9,11 +9,22 @@ import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/json-ld";
-import { getProject } from "@/lib/cms/projects";
+import { getProject, getProjects } from "@/lib/cms/projects";
 import { formatMonthYear } from "@/lib/format";
 import { absoluteUrl, siteConfig, summarize, toIsoDate } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
+
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects
+    .filter(
+      (project) => typeof project.slug === "string" && project.slug.length > 0,
+    )
+    .map((project) => ({ slug: project.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -84,23 +95,23 @@ export default async function ProjectPage({ params }: PageProps) {
         }}
       />
       <FeedNav backHref="/projects" backLabel="Back to projects" />
-      <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-6 pt-20 pb-24">
+      <main className="relative z-10 mx-auto w-full max-w-4xl flex-1 px-5 pt-20 pb-24 sm:px-6">
         <header className="mt-12 border-b border-hairline pb-10">
-          <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          <div className="flex min-w-0 flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
             <span>{formatMonthYear(project.date ?? project.year)}</span>
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-hairline px-2.5 py-1"
+                className="max-w-full break-words rounded-full border border-hairline px-2.5 py-1"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <h1 className="mt-6 font-display text-5xl font-medium leading-[1.02] tracking-[-0.04em] sm:text-7xl">
+          <h1 className="mt-6 text-balance break-words font-display text-4xl font-medium leading-[1.04] tracking-tight sm:text-7xl">
             {project.title}
           </h1>
-          <p className="mt-6 text-xl leading-relaxed text-muted-foreground">
+          <p className="mt-6 break-words text-lg leading-relaxed text-muted-foreground sm:text-xl">
             {project.description}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

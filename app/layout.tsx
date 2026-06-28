@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Bricolage_Grotesque, Allura } from "next/font/google
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
-import { fetchItems } from "@/lib/cms/data";
 import { absoluteUrl, siteConfig } from "@/lib/seo";
 import "./globals.css";
 
@@ -96,8 +95,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialItems = await fetchItems();
-
   return (
     <html
       lang="en"
@@ -107,7 +104,7 @@ export default async function RootLayout({
         suppressHydrationWarning
         className="grain min-h-full flex flex-col bg-background text-foreground"
       >
-        <Providers initialItems={initialItems}>{children}</Providers>
+        <Providers>{children}</Providers>
         <Toaster position="bottom-right" />
         <Analytics />
       </body>
