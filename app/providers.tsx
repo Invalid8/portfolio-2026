@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   AnonymousEditProvider,
@@ -41,6 +41,55 @@ function PersistEditMode() {
   return null;
 }
 
+function CmsPageProvider({
+  children,
+  initialItems,
+}: {
+  children: ReactNode;
+  initialItems?: ItemMap;
+}) {
+  const { isAdmin, isEditing } = useCmsAuth();
+  const [items, setItems] = useState<ItemMap | undefined>(initialItems);
+  const [version, setVersion] = useState(0);
+
+  useEffect(() => {
+    if (!isAdmin || !isEditing || items) return;
+
+    let cancelled = false;
+
+    fetch("/api/admin/bootstrap")
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to load CMS items");
+        return response.json() as Promise<ItemMap>;
+      })
+      .then((nextItems) => {
+        if (cancelled) return;
+        setItems(nextItems);
+        setVersion((value) => value + 1);
+      })
+      .catch((error) => {
+        console.error("[cms] failed to bootstrap edit data:", error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAdmin, isEditing, items]);
+
+  return (
+    <PageProvider
+      key={version}
+      initialItems={items}
+      apiBasePath="/api/admin"
+      storage={storage}
+      notify={notify}
+    >
+      <PersistEditMode />
+      {children}
+    </PageProvider>
+  );
+}
+
 export function Providers({
   children,
   initialItems,
@@ -49,15 +98,7 @@ export function Providers({
   initialItems?: ItemMap;
 }) {
   const page = (
-    <PageProvider
-      initialItems={initialItems}
-      apiBasePath="/api/admin"
-      storage={storage}
-      notify={notify}
-    >
-      <PersistEditMode />
-      {children}
-    </PageProvider>
+    <CmsPageProvider initialItems={initialItems}>{children}</CmsPageProvider>
   );
 
   if (googleEnabled) {
