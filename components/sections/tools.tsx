@@ -35,8 +35,12 @@ const fallback: ToolItem[] = staticTools.map((t) => ({
 
 export function Tools() {
   const { isAdmin, isEditing } = useCmsAuth();
-  const { items: cmsItems, createItem, deleteItem, reorderItems } =
-    usePageContext();
+  const {
+    items: cmsItems,
+    createItem,
+    deleteItem,
+    reorderItems,
+  } = usePageContext();
 
   const live = (cmsItems.tools as ToolItem[] | undefined) ?? [];
   const items = live.length ? live : fallback;
@@ -105,65 +109,65 @@ export function Tools() {
                   : "hidden";
 
           return (
-          <Reveal
-            key={tool.id}
-            delay={(i % 3) * 60}
-            className={collapsedClass}
-          >
-            <div
-              draggable={canEdit}
-              onDragStart={() => setDragId(tool.id)}
-              onDragOver={(e) => canEdit && e.preventDefault()}
-              onDrop={() => handleDrop(tool.id)}
-              className={`group/tool relative flex items-center gap-4 rounded-xl border p-4 transition-colors ${
-                i === 0 && !canEdit
-                  ? "border-[color:var(--text-muted)] bg-surface-2"
-                  : "border-hairline bg-surface hover:border-[color:var(--text-muted)]"
-              } ${canEdit ? "cursor-grab active:cursor-grabbing" : ""} ${
-                dragId === tool.id ? "opacity-50" : ""
-              }`}
+            <Reveal
+              key={tool.id}
+              delay={(i % 3) * 60}
+              className={collapsedClass}
             >
-              {canEdit && (
-                <GripVertical className="size-4 shrink-0 text-muted-foreground" />
-              )}
-              <span
-                className="flex size-10 shrink-0 items-center justify-center rounded-lg text-sm font-semibold text-foreground"
-                style={{ backgroundColor: `${tool.color}1A` }}
+              <div
+                draggable={canEdit}
+                onDragStart={() => setDragId(tool.id)}
+                onDragOver={(e) => canEdit && e.preventDefault()}
+                onDrop={() => handleDrop(tool.id)}
+                className={`group/tool relative flex items-center gap-4 rounded-xl border p-4 transition-colors ${
+                  i === 0 && !canEdit
+                    ? "border-[color:var(--text-muted)] bg-surface-2"
+                    : "border-hairline bg-surface hover:border-[color:var(--text-muted)]"
+                } ${canEdit ? "cursor-grab active:cursor-grabbing" : ""} ${
+                  dragId === tool.id ? "opacity-50" : ""
+                }`}
               >
-                {tool.img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={tool.img}
-                    alt=""
-                    aria-hidden="true"
-                    width={20}
-                    height={20}
-                    className="size-5"
-                  />
-                ) : (
-                  tool.name.charAt(0)
+                {canEdit && (
+                  <GripVertical className="size-4 shrink-0 text-muted-foreground" />
                 )}
-              </span>
-              <span className="flex flex-col">
-                <span className="text-sm font-medium leading-tight">
-                  {tool.name}
-                </span>
-                <span className="mt-0.5 text-xs text-muted-foreground">
-                  {tool.category}
-                </span>
-              </span>
-              {canEdit && (
-                <button
-                  type="button"
-                  onClick={() => deleteItem("tools", tool.id)}
-                  aria-label={`Remove ${tool.name}`}
-                  className="absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-md border border-hairline bg-surface text-muted-foreground opacity-0 transition-opacity group-hover/tool:opacity-100 hover:text-destructive"
+                <span
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg text-sm font-semibold text-foreground"
+                  style={{ backgroundColor: `${tool.color}1A` }}
                 >
-                  <X className="size-3.5" />
-                </button>
-              )}
-            </div>
-          </Reveal>
+                  {tool.img ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={tool.img}
+                      alt=""
+                      aria-hidden="true"
+                      width={20}
+                      height={20}
+                      className="size-5"
+                    />
+                  ) : (
+                    tool.name.charAt(0)
+                  )}
+                </span>
+                <span className="flex flex-col">
+                  <span className="text-sm font-medium leading-tight">
+                    {tool.name}
+                  </span>
+                  <span className="mt-0.5 text-xs text-muted-foreground">
+                    {tool.category}
+                  </span>
+                </span>
+                {canEdit && (
+                  <button
+                    type="button"
+                    onClick={() => deleteItem("tools", tool.id)}
+                    aria-label={`Remove ${tool.name}`}
+                    className="absolute top-2 right-2 inline-flex size-6 items-center justify-center rounded-md border border-hairline bg-surface text-muted-foreground opacity-0 transition-opacity group-hover/tool:opacity-100 hover:text-destructive"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                )}
+              </div>
+            </Reveal>
           );
         })}
 

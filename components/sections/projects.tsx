@@ -317,7 +317,7 @@ export function Projects({
 
       {isAdmin && isEditing && live.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">
-          Run <code className="text-foreground">npm run seed</code> to enable
+          Run <code className="text-foreground">npm run seed </code> to enable
           editing, adding &amp; reordering projects.
         </p>
       )}

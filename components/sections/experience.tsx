@@ -60,7 +60,12 @@ function toForm(e?: ExpItem): FormState {
 
 export function Experience() {
   const { isAdmin, isEditing } = useCmsAuth();
-  const { items: cmsItems, createItem, updateItem, deleteItem } = usePageContext();
+  const {
+    items: cmsItems,
+    createItem,
+    updateItem,
+    deleteItem,
+  } = usePageContext();
 
   const live = (cmsItems.experiences as ExpItem[] | undefined) ?? [];
   const source = live.length ? live : fallback;
@@ -192,7 +197,7 @@ export function Experience() {
 
       {isAdmin && isEditing && live.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">
-          Run <code className="text-foreground">npm run seed</code> to enable
+          Run <code className="text-foreground">npm run seed </code> to enable
           editing your career history.
         </p>
       )}
