@@ -58,7 +58,11 @@ function toForm(e?: ExpItem): FormState {
   };
 }
 
-export function Experience() {
+export function Experience({
+  initialExperiences = [],
+}: {
+  initialExperiences?: ExpItem[];
+} = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const {
     items: cmsItems,
@@ -68,7 +72,11 @@ export function Experience() {
   } = usePageContext();
 
   const live = (cmsItems.experiences as ExpItem[] | undefined) ?? [];
-  const source = live.length ? live : fallback;
+  const source = live.length
+    ? live
+    : initialExperiences.length
+      ? initialExperiences
+      : fallback;
   // Always sorted by start date, most recent first.
   const items = [...source].sort((a, b) =>
     (b.start || "").localeCompare(a.start || ""),
@@ -195,7 +203,10 @@ export function Experience() {
         ))}
       </ol>
 
-      {isAdmin && isEditing && live.length === 0 && (
+      {isAdmin &&
+        isEditing &&
+        live.length === 0 &&
+        initialExperiences.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">
           Run <code className="text-foreground">npm run seed </code> to enable
           editing your career history.

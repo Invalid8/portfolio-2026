@@ -86,12 +86,14 @@ export function Projects({
   title = "Featured",
   highlight = "projects",
   limit,
+  initialProjects = [],
 }: {
   showViewAll?: boolean;
   title?: string;
   highlight?: string;
   /** Cap the number of project cards shown (e.g. the landing page). */
   limit?: number;
+  initialProjects?: ProjectItem[];
 } = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const {
@@ -103,7 +105,7 @@ export function Projects({
   } = usePageContext();
 
   const live = (cmsItems.projects as ProjectItem[] | undefined) ?? [];
-  const items = live.length ? live : fallback;
+  const items = live.length ? live : initialProjects.length ? initialProjects : fallback;
   const canEdit = isAdmin && isEditing && live.length > 0;
   // Don't truncate while editing, so admins can still reorder/delete the full set.
   const visibleItems =
@@ -315,7 +317,7 @@ export function Projects({
         )}
       </div>
 
-      {isAdmin && isEditing && live.length === 0 && (
+      {isAdmin && isEditing && live.length === 0 && initialProjects.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">
           Run <code className="text-foreground">npm run seed </code> to enable
           editing, adding &amp; reordering projects.

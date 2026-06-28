@@ -12,11 +12,20 @@ import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { JsonLd } from "@/components/json-ld";
 import { owner, socials } from "@/lib/content";
+import { getExperiences } from "@/lib/cms/experience";
+import { getProjects } from "@/lib/cms/projects";
+import { getTools } from "@/lib/cms/tools";
 import { siteConfig } from "@/lib/seo";
 
 export const revalidate = 300;
 
-export default function Home() {
+export default async function Home() {
+  const [projects, tools, experiences] = await Promise.all([
+    getProjects(),
+    getTools(),
+    getExperiences(),
+  ]);
+
   return (
     <>
       <JsonLd
@@ -49,9 +58,9 @@ export default function Home() {
         <Hero />
         <About />
         <Services />
-        <Tools />
-        <Projects limit={6} />
-        <Experience />
+        <Tools initialTools={tools} />
+        <Projects limit={6} initialProjects={projects} />
+        <Experience initialExperiences={experiences} />
         <Feed showViewAll limit={2} />
         <Approach />
       </main>

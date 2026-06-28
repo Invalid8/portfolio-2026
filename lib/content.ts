@@ -71,7 +71,7 @@ export const owner = {
   name: "Daniel Fadamitan",
   handle: "dalgoridim",
   role: "Frontend Developer",
-  location: "Lagos, Nigeria",
+  location: "Anywhere",
   email: "b.fadamitan2019@gmail.com",
   phone: "+234 703 4797 467",
   calendar: "https://calendly.com/b-fadamitan2019/30min",
@@ -103,13 +103,13 @@ export const hero = {
   headlineAccent: "accessible, fast",
   headlineTail: "web experiences people actually enjoy.",
   subtitle:
-    "A Nigeria-based frontend developer turning complex problems into clean, user-friendly interfaces with React, Next.js, and TypeScript.",
+    "A frontend developer turning complex problems into clean, user-friendly interfaces with React, Next.js, and TypeScript.",
 };
 
 // ── About / intro ───────────────────────────────────────────────────────────
 export const about = {
   leading:
-    "I'm a frontend developer based in Nigeria with a strong Computer Science foundation. I specialise in building accessible, user-friendly web applications - with a particular focus on React.js, React Native, Next.js, and TypeScript.",
+    "I'm a frontend developer based with a strong Computer Science foundation. I specialise in building accessible, user-friendly web applications - with a particular focus on React.js, React Native, Next.js, and TypeScript.",
   trailing:
     "When I'm not coding, I'm gaming (currently Mobile Legends) and digging into new tech to stay sharp. Always curious, always shipping.",
 };

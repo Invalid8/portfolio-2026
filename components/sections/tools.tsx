@@ -33,7 +33,11 @@ const fallback: ToolItem[] = staticTools.map((t) => ({
   color: t.color,
 }));
 
-export function Tools() {
+export function Tools({
+  initialTools = [],
+}: {
+  initialTools?: ToolItem[];
+} = {}) {
   const { isAdmin, isEditing } = useCmsAuth();
   const {
     items: cmsItems,
@@ -43,7 +47,7 @@ export function Tools() {
   } = usePageContext();
 
   const live = (cmsItems.tools as ToolItem[] | undefined) ?? [];
-  const items = live.length ? live : fallback;
+  const items = live.length ? live : initialTools.length ? initialTools : fallback;
   // Editing requires seeded rows (so we never overwrite the static fallback).
   const canEdit = isAdmin && isEditing && live.length > 0;
 
@@ -217,7 +221,7 @@ export function Tools() {
         </div>
       )}
 
-      {isAdmin && isEditing && live.length === 0 && (
+      {isAdmin && isEditing && live.length === 0 && initialTools.length === 0 && (
         <p className="mt-6 font-mono text-xs text-muted-foreground">
           Run <code className="text-foreground">npm run seed </code> to enable
           adding, removing &amp; reordering tools.
