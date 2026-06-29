@@ -98,6 +98,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`dark ${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${allura.variable} h-full antialiased`}
     >
       <body
