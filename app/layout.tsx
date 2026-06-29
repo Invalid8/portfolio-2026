@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bricolage_Grotesque, Allura } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Bricolage_Grotesque,
+  Allura,
+} from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "./providers";
@@ -107,7 +112,7 @@ export default async function RootLayout({
       >
         <Providers>{children}</Providers>
         <Toaster position="bottom-right" />
-        <Analytics />
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );

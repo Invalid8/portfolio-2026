@@ -1,3 +1,113 @@
+const tileColors = ["#0b0b0d", "#0c0c0e", "#0d0d0f", "#0e0e10", "#101012"];
+
+function seededRandom(seed: number) {
+  let value = seed;
+  return () => {
+    value = (value * 1664525 + 1013904223) % 4294967296;
+    return value / 4294967296;
+  };
+}
+
+const blockTiles = (() => {
+  const random = seededRandom(20260229);
+  const cells: { x: number; y: number }[] = [];
+
+  for (let row = 0; row < 9; row += 1) {
+    for (let col = 0; col < 18; col += 1) {
+      cells.push({ x: col * 70, y: row * 70 });
+    }
+  }
+
+  for (let index = cells.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    const current = cells[index];
+    const swap = cells[swapIndex];
+    if (!current || !swap) continue;
+    cells[index] = swap;
+    cells[swapIndex] = current;
+  }
+
+  return cells.slice(0, 24).map((cell) => ({
+    ...cell,
+    color: tileColors[Math.floor(random() * tileColors.length)] ?? "#0d0d0f",
+  }));
+})();
+
+function BlockBackground() {
+  const verticalLines = Array.from({ length: 18 }, (_, i) => i * 70);
+  const horizontalLines = Array.from({ length: 10 }, (_, i) => i * 70);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: 1200,
+        height: 630,
+        display: "flex",
+        overflow: "hidden",
+        background: "#09090b",
+      }}
+    >
+      {verticalLines.map((left) => (
+        <div
+          key={`v-${left}`}
+          style={{
+            position: "absolute",
+            top: 0,
+            left,
+            width: 1,
+            height: "100%",
+            display: "flex",
+            background: "#101012",
+          }}
+        />
+      ))}
+      {horizontalLines.map((top) => (
+        <div
+          key={`h-${top}`}
+          style={{
+            position: "absolute",
+            top,
+            left: 0,
+            width: "100%",
+            height: 1,
+            display: "flex",
+            background: "#0f0f11",
+          }}
+        />
+      ))}
+      {blockTiles.map((tile, index) => (
+        <div
+          key={index}
+          style={{
+            position: "absolute",
+            left: tile.x,
+            top: tile.y,
+            width: 70,
+            height: 70,
+            display: "flex",
+            background: tile.color,
+          }}
+        />
+      ))}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: 1200,
+          height: 630,
+          display: "flex",
+          background:
+            "linear-gradient(90deg, rgba(9,9,11,0.08), rgba(9,9,11,0.02) 44%, rgba(9,9,11,0.2)), linear-gradient(180deg, rgba(9,9,11,0.08), rgba(9,9,11,0.22))",
+        }}
+      />
+    </div>
+  );
+}
+
 export function OgCard({
   eyebrow,
   title,
@@ -12,18 +122,28 @@ export function OgCard({
   return (
     <div
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        overflow: "hidden",
         background: "#09090b",
         color: "#f4f4f5",
         padding: "68px 76px",
         border: "1px solid #27272a",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+      <BlockBackground />
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: 18,
+        }}
+      >
         <div
           style={{
             width: 54,
@@ -45,7 +165,14 @@ export function OgCard({
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          gap: 24,
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -73,6 +200,7 @@ export function OgCard({
 
       <div
         style={{
+          position: "relative",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -121,22 +249,11 @@ export function HomeOgCard() {
         padding: "58px 68px",
       }}
     >
-      {[24, 50, 76].map((left) => (
-        <div
-          key={left}
-          style={{
-            position: "absolute",
-            insetBlock: 0,
-            left: `${left}%`,
-            width: 1,
-            display: "flex",
-            background: "rgba(255,255,255,0.035)",
-          }}
-        />
-      ))}
+      <BlockBackground />
 
       <div
         style={{
+          position: "relative",
           display: "flex",
           color: "#a1a1aa",
           fontSize: 20,
@@ -148,6 +265,7 @@ export function HomeOgCard() {
 
       <div
         style={{
+          position: "relative",
           display: "flex",
           flexDirection: "column",
           maxWidth: 1040,
@@ -169,6 +287,7 @@ export function HomeOgCard() {
 
       <div
         style={{
+          position: "relative",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
