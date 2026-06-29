@@ -9,7 +9,7 @@ export type Identity = typeof owner;
 
 export function useIdentity() {
   const { items } = usePageContext();
-  const identity = items.portfolio?.find((item) => item.id === "identity");
+  const identity = items.identity?.find((item) => item.id === "identity");
   return { ...owner, ...identity } as Identity;
 }
 
@@ -24,7 +24,7 @@ export function EditableIdentityText({
 }) {
   return (
     <EditableText
-      collection="portfolio"
+      collection="identity"
       sectionKey="identity"
       fieldKey={fieldKey}
       className={className}

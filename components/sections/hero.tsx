@@ -13,6 +13,22 @@ import { useIdentity } from "@/components/identity";
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
 const heroStack = tools;
 
+function renderHeroHeadline(raw: string) {
+  const words = raw.match(/\S+\s*/g) ?? [];
+
+  if (words.length <= 4) return raw;
+
+  const lead = words.slice(0, 4).join("");
+  const tail = words.slice(4).join("");
+
+  return (
+    <>
+      {lead}
+      <span className="text-muted-foreground">{tail}</span>
+    </>
+  );
+}
+
 export function Hero() {
   const identity = useIdentity();
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -42,24 +58,10 @@ export function Hero() {
           <EditableText
             collection="portfolio"
             sectionKey="hero"
-            fieldKey="headlineLead"
+            fieldKey="headline"
+            renderValue={renderHeroHeadline}
           >
-            {hero.headlineLead}
-          </EditableText>{" "}
-          <EditableText
-            collection="portfolio"
-            sectionKey="hero"
-            fieldKey="headlineAccent"
-          >
-            {hero.headlineAccent}
-          </EditableText>{" "}
-          <EditableText
-            collection="portfolio"
-            sectionKey="hero"
-            fieldKey="headlineTail"
-            className="text-muted-foreground"
-          >
-            {hero.headlineTail}
+            {hero.headline}
           </EditableText>
         </h1>
       </Reveal>

@@ -69,7 +69,7 @@ export function IdentitySettings() {
 
   function applyChanges() {
     for (const [key, value] of Object.entries(form)) {
-      editField("portfolio", "identity", key, value);
+      editField("identity", "identity", key, value);
     }
     setOpen(false);
   }

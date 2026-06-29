@@ -98,10 +98,7 @@ export const socials: Social[] = [
 
 // ── Hero ──────────────────────────────────────────────────────────────────
 export const hero = {
-  // Rendered two-tone; the bracketed words get the accent/muted treatment.
-  headlineLead: "Daniel builds",
-  headlineAccent: "accessible, fast",
-  headlineTail: "web experiences people actually enjoy.",
+  headline: "Daniel builds accessible, fast web experiences people actually enjoy.",
   subtitle:
     "A frontend developer turning complex problems into clean, user-friendly interfaces with React, Next.js, and TypeScript.",
 };

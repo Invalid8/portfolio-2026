@@ -13,8 +13,7 @@ const doc = (id: string, fields: Record<string, unknown>): Item => ({ id, ...fie
 
 export function defaultItems(): ItemMap {
   return {
-    // Singletons (one item each, addressed by a stable id).
-    portfolio: [
+    identity: [
       doc("identity", {
         name: owner.name,
         handle: owner.handle,
@@ -25,10 +24,11 @@ export function defaultItems(): ItemMap {
         resume: owner.resume,
         available: owner.available,
       }),
+    ],
+    // Singletons (one item each, addressed by a stable id).
+    portfolio: [
       doc("hero", {
-        headlineLead: hero.headlineLead,
-        headlineAccent: hero.headlineAccent,
-        headlineTail: hero.headlineTail,
+        headline: hero.headline,
         subtitle: hero.subtitle,
       }),
       doc("about", { leading: about.leading, trailing: about.trailing }),

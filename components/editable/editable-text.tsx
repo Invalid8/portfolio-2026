@@ -16,6 +16,7 @@ export function EditableText({
   as,
   className,
   children,
+  renderValue,
 }: {
   collection: string;
   sectionKey: string;
@@ -23,6 +24,7 @@ export function EditableText({
   as?: ElementType;
   className?: string;
   children?: ReactNode;
+  renderValue?: (raw: string) => ReactNode;
 }) {
   return (
     <ContentEditSpan
@@ -31,6 +33,7 @@ export function EditableText({
       fieldKey={fieldKey}
       as={as}
       className={cn("cms-editable", className)}
+      renderValue={renderValue}
     >
       {children}
     </ContentEditSpan>

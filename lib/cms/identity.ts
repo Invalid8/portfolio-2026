@@ -7,7 +7,7 @@ export type Identity = typeof owner;
 
 export const getIdentity = cache(async (): Promise<Identity> => {
   try {
-    const row = await getDataAdapter().fetchById("portfolio", "identity");
+    const row = await getDataAdapter().fetchById("identity", "identity");
     if (row) return { ...owner, ...row } as Identity;
   } catch (error) {
     console.warn(

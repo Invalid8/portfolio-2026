@@ -29,6 +29,20 @@
       "when": 1782696979644,
       "tag": "0003_milky_cloak",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782699236149,
+      "tag": "0004_living_thaddeus_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1782699988266,
+      "tag": "0005_brainy_lady_mastermind",
+      "breakpoints": true
     }
   ]
 }
