@@ -323,7 +323,7 @@ export function HomeOgCard() {
           </div>
         </div>
         <div style={{ display: "flex", color: "#71717a", fontSize: 18 }}>
-          Frontend developer · Lagos, Nigeria
+          Frontend developer
         </div>
       </div>
     </div>

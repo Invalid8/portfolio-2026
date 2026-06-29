@@ -4,9 +4,9 @@ export const siteConfig = {
   name: "Daniel Fadamitan",
   title: "Daniel Fadamitan | Frontend Developer",
   description:
-    "Nigeria-based frontend developer building accessible, high-performing web and mobile experiences with React, Next.js, and TypeScript.",
+    "Frontend developer building accessible, high-performing web and mobile experiences with React, Next.js, and TypeScript.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://dalgoridim.com",
-  locale: "en_NG",
+  locale: "en_US",
   twitter: "@D_Invalid1",
   defaultOgImage: "/opengraph-image",
 } as const;

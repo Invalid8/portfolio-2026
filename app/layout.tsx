@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   category: "technology",
   keywords: [
     "Daniel Fadamitan",
-    "frontend developer Nigeria",
+    "frontend developer",
     "React developer",
     "Next.js developer",
     "TypeScript developer",

@@ -37,11 +37,6 @@ export default async function Home() {
           url: siteConfig.url,
           email: `mailto:${owner.email}`,
           jobTitle: owner.role,
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Lagos",
-            addressCountry: "NG",
-          },
           sameAs: socials.map((social) => social.href),
           knowsAbout: [
             "React",
