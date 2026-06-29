@@ -8,10 +8,10 @@ import { remarkStyleStrings } from "@/lib/mdx/remark-style-strings";
 
 function CodeBlock(props: ComponentPropsWithoutRef<"pre">) {
   return (
-    <pre {...props} data-code-block>
+    <div className="code-block-frame" data-code-block>
       <CodeCopyButton />
-      {props.children}
-    </pre>
+      <pre {...props}>{props.children}</pre>
+    </div>
   );
 }
 
