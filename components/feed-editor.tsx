@@ -41,7 +41,6 @@ export function FeedEditor({ slug }: { slug?: string }) {
   const [form, setForm] = useState<FeedForm>(initialForm);
   const [savedSnapshot, setSavedSnapshot] = useState(() => JSON.stringify(initialForm));
   const [postId, setPostId] = useState<string | undefined>(post?.id);
-  const [currentlyPublished, setCurrentlyPublished] = useState(post?.published ?? false);
   const [saving, setSaving] = useState(false);
   const saved = useRef(false);
   const hasUnsavedChanges = JSON.stringify(form) !== savedSnapshot;
@@ -85,6 +84,15 @@ export function FeedEditor({ slug }: { slug?: string }) {
       slug: uniqueSlug(slugify(form.slug || title), takenSlugs),
       excerpt: form.excerpt.trim(),
     };
+    const savedForm = {
+      title: payload.title,
+      slug: payload.slug,
+      excerpt: payload.excerpt,
+      body: payload.body,
+      date: payload.date,
+      tags: payload.tags,
+      published: payload.published,
+    };
     setSaving(true);
     saved.current = true;
     try {
@@ -97,14 +105,14 @@ export function FeedEditor({ slug }: { slug?: string }) {
         const newId = await createItem("feeds", { ...payload, order: nextOrder });
         setPostId(newId);
       }
-      setCurrentlyPublished(published);
+      setForm(savedForm);
       if (published) {
         // Publishing sends you to the feed listing.
         router.push("/feed");
         return;
       }
       // Saving a draft keeps you in the editor; just clear the "unsaved" flag.
-      setSavedSnapshot(JSON.stringify(form));
+      setSavedSnapshot(JSON.stringify(savedForm));
       saved.current = false;
       setSaving(false);
     } catch {
@@ -120,12 +128,27 @@ export function FeedEditor({ slug }: { slug?: string }) {
           <Button type="button" variant="ghost" size="icon" onClick={leaveEditor} aria-label="Back to Feed"><ArrowLeft className="size-5" /></Button>
           <div>
             <p className="font-display text-lg font-medium">{isExisting ? "Edit post" : "New feed post"}</p>
-            <p className="text-xs text-muted-foreground">Markdown and MDX supported</p>
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              <p className="text-xs text-muted-foreground">Markdown and MDX supported</p>
+              <span
+                className={`rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] ${
+                  form.published
+                    ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                    : "border-lime/30 bg-lime/10 text-lime"
+                }`}
+              >
+                {form.published ? "Published" : "Draft"}
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button type="button" variant="outline" onClick={() => save(false)} disabled={!hasContent || saving}><Save className="size-4" /> {saving ? "Saving…" : "Save draft"}</Button>
-          <Button type="button" onClick={() => save(true)} disabled={!form.title.trim() || saving}><FileCheck className="size-4" /> {currentlyPublished ? "Save" : "Publish"}</Button>
+          <Button type="button" variant="outline" onClick={() => save(false)} disabled={!hasContent || saving}>
+            <Save className="size-4" /> {saving ? "Saving..." : form.published ? "Move to draft" : "Save draft"}
+          </Button>
+          <Button type="button" onClick={() => save(true)} disabled={!form.title.trim() || saving}>
+            <FileCheck className="size-4" /> {form.published ? "Save published" : "Publish"}
+          </Button>
         </div>
       </header>
 
@@ -137,6 +160,29 @@ export function FeedEditor({ slug }: { slug?: string }) {
             <textarea placeholder="Short excerpt" value={form.excerpt} onChange={(event) => set("excerpt", event.target.value)} rows={5} className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50" />
             <Input type="date" aria-label="Publish date" value={form.date} onChange={(event) => set("date", event.target.value)} />
             <TagInput value={form.tags} onChange={(tags) => set("tags", tags)} suggestions={existingTags} placeholder="Add tags and press Enter" />
+            <div className="rounded-xl border border-hairline p-3">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                Status
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={form.published ? "default" : "outline"}
+                  onClick={() => set("published", true)}
+                >
+                  Published
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={!form.published ? "default" : "outline"}
+                  onClick={() => set("published", false)}
+                >
+                  Draft
+                </Button>
+              </div>
+            </div>
           </div>
         </aside>
         <section className="min-h-0 overflow-hidden bg-black p-3 sm:p-5">

@@ -73,6 +73,11 @@ export function FeedList({
               <div className="flex min-w-0 items-center gap-2">
                 {canEdit && <GripVertical className="size-4 shrink-0" />}
                 <span>{post.date}</span>
+                {canEdit && !post.published && (
+                  <span className="rounded-full border border-lime/30 bg-lime/10 px-2 py-0.5 text-[9px] text-lime">
+                    Draft
+                  </span>
+                )}
               </div>
               {canEdit && (
                 <div className="relative z-20 flex shrink-0 items-center gap-2">
