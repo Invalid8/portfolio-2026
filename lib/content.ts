@@ -76,7 +76,7 @@ export const owner = {
   phone: "+234 703 4797 467",
   calendar: "https://calendly.com/b-fadamitan2019/30min",
   resume:
-    "https://drive.google.com/file/d/1ixmuBYgzXQdXrTn1n9aoz4SWYRU715h-/view",
+    "https://drive.google.com/file/d/17ESHvWc8aV7ZrPCSM_X2Map--_rlOvDk/view",
   available: true,
 };
 
