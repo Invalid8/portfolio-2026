@@ -22,6 +22,13 @@
       "when": 1782096342911,
       "tag": "0002_skinny_jack_murdock",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782696979644,
+      "tag": "0003_milky_cloak",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,6 @@
 import type { Item, ItemMap } from "@dalgoridim/headless-cms";
 // Relative (not "@/…") so the tsx seed script can load this without path-alias resolution.
-import { hero, about, contact, stats, principles } from "../content";
+import { owner, hero, about, contact, stats, principles } from "../content";
 
 /**
  * Default editable copy for the "section" collections — singleton docs and small
@@ -15,6 +15,16 @@ export function defaultItems(): ItemMap {
   return {
     // Singletons (one item each, addressed by a stable id).
     portfolio: [
+      doc("identity", {
+        name: owner.name,
+        handle: owner.handle,
+        role: owner.role,
+        email: owner.email,
+        phone: owner.phone,
+        calendar: owner.calendar,
+        resume: owner.resume,
+        available: owner.available,
+      }),
       doc("hero", {
         headlineLead: hero.headlineLead,
         headlineAccent: hero.headlineAccent,

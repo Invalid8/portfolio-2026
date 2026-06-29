@@ -11,8 +11,9 @@ import { SiteFooter } from "@/components/sections/site-footer";
 import { AdminBar } from "@/components/admin-bar";
 import { AdminLogin } from "@/components/admin-login";
 import { JsonLd } from "@/components/json-ld";
-import { owner, socials } from "@/lib/content";
+import { socials } from "@/lib/content";
 import { getExperiences } from "@/lib/cms/experience";
+import { getIdentity } from "@/lib/cms/identity";
 import { getProjects } from "@/lib/cms/projects";
 import { getTools } from "@/lib/cms/tools";
 import { siteConfig } from "@/lib/seo";
@@ -25,6 +26,7 @@ export default async function Home() {
     getTools(),
     getExperiences(),
   ]);
+  const identity = await getIdentity();
 
   return (
     <>
@@ -32,11 +34,11 @@ export default async function Home() {
         data={{
           "@context": "https://schema.org",
           "@type": "Person",
-          name: owner.name,
-          alternateName: owner.handle,
+          name: identity.name,
+          alternateName: identity.handle,
           url: siteConfig.url,
-          email: `mailto:${owner.email}`,
-          jobTitle: owner.role,
+          email: `mailto:${identity.email}`,
+          jobTitle: identity.role,
           sameAs: socials.map((social) => social.href),
           knowsAbout: [
             "React",

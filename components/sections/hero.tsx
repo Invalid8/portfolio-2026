@@ -6,13 +6,15 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { hero, owner, tools } from "@/lib/content";
+import { hero, tools } from "@/lib/content";
 import { ADMIN_LOGIN_EVENT } from "@/lib/admin-login-event";
+import { useIdentity } from "@/components/identity";
 
 // A grayscale tech-logo strip under the hero (mirrors the reference's logo row).
 const heroStack = tools;
 
 export function Hero() {
+  const identity = useIdentity();
   const holdTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const didLongPress = useRef(false);
 
@@ -66,7 +68,7 @@ export function Hero() {
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Button asChild size="lg" className="h-12 rounded-xl px-7 text-sm">
             <Link
-              href={owner.calendar}
+              href={identity.calendar}
               target="_blank"
               rel="noopener noreferrer"
             >

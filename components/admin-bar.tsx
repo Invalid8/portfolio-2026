@@ -1,5 +1,6 @@
 import { SaveButton } from "@/components/save-button";
 import { EditToggle } from "@/components/edit-toggle";
+import { IdentitySettings } from "@/components/identity-settings";
 
 /**
  * Floating bottom-right control cluster: the universal Edit toggle (available to
@@ -9,6 +10,7 @@ import { EditToggle } from "@/components/edit-toggle";
 export function AdminBar({ showEdit = true }: { showEdit?: boolean }) {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2">
+      <IdentitySettings />
       {showEdit && <EditToggle />}
       <SaveButton />
     </div>

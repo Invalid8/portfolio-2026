@@ -1,11 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { contact, owner, socials, nav } from "@/lib/content";
+import { contact, socials, nav } from "@/lib/content";
+import { EditableIdentityText, useIdentity } from "@/components/identity";
 
 export function SiteFooter() {
+  const identity = useIdentity();
+
   return (
     <footer
       id="contact"
@@ -35,7 +40,7 @@ export function SiteFooter() {
             </EditableText>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button asChild size="lg" className="rounded-full px-5">
-                <Link href={owner.calendar} target="_blank" rel="noopener noreferrer">
+                <Link href={identity.calendar} target="_blank" rel="noopener noreferrer">
                   <Calendar className="size-4" /> Book a meeting
                 </Link>
               </Button>
@@ -46,7 +51,7 @@ export function SiteFooter() {
                 className="rounded-full px-5"
               >
                 <Link
-                  href={owner.resume}
+                  href={identity.resume}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -96,17 +101,22 @@ export function SiteFooter() {
         {/* Signature wordmark watermark — huge, full-bleed script flourish. */}
         <Reveal delay={200}>
           <p
-            aria-hidden="true"
-            className="pointer-events-none mt-16 -ml-45 xl:-ml-75 -mb-2 w-full select-none whitespace-nowrap text-center font-script leading-[0.8] text-foreground/[0.07]"
+            className="relative left-1/2 mt-16 -mb-2 w-screen -translate-x-1/2 whitespace-nowrap text-center font-script leading-[0.8] text-foreground/[0.07]"
             style={{ fontSize: "clamp(4.5rem, 19vw, 16rem)" }}
           >
-            {owner.name}
+            <EditableIdentityText fieldKey="name" className="select-text">
+              {identity.name}
+            </EditableIdentityText>
           </p>
         </Reveal>
 
-        <div className="mt-8 flex flex-col justify-center gap-3 border-hairline pt-8 font-mono text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:justify-betweend">
-          <span>
-            © {new Date().getFullYear()} {owner.name}. All rights reserved.
+        <div className="mt-8 flex justify-center border-hairline pt-8 font-mono text-[11px] text-muted-foreground">
+          <span className="text-center">
+            © {new Date().getFullYear()}{" "}
+            <EditableIdentityText fieldKey="name">
+              {identity.name}
+            </EditableIdentityText>
+            . All rights reserved.
           </span>
         </div>
       </div>

@@ -1,6 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { owner } from "@/lib/content";
+import { EditableIdentityText, useIdentity } from "@/components/identity";
 
 export function FeedNav({
   backHref = "/feed",
@@ -9,11 +11,15 @@ export function FeedNav({
   backHref?: string;
   backLabel?: string;
 } = {}) {
+  const identity = useIdentity();
+
   return (
     <header className="sticky top-0 z-50 border-b border-hairline bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-6">
         <Link href="/" className="font-script text-2xl tracking-tight" aria-label="Back to home">
-          {owner.handle}
+          <EditableIdentityText fieldKey="handle">
+            {identity.handle}
+          </EditableIdentityText>
           <span className="text-lime">.</span>
         </Link>
 

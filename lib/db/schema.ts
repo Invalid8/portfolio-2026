@@ -15,6 +15,14 @@ const stamps = {
 /** Singleton "section" docs: hero, about, contact (one row each). */
 export const portfolio = pgTable("portfolio", {
   id: text("id").primaryKey(),
+  name: text("name"),
+  handle: text("handle"),
+  role: text("role"),
+  email: text("email"),
+  phone: text("phone"),
+  calendar: text("calendar"),
+  resume: text("resume"),
+  available: boolean("available"),
   headlineLead: text("headline_lead"),
   headlineAccent: text("headline_accent"),
   headlineTail: text("headline_tail"),

@@ -1,9 +1,14 @@
+"use client";
+
 import { Section } from "@/components/section";
 import { Reveal } from "@/components/reveal";
 import { EditableText } from "@/components/editable/editable-text";
-import { about, owner, stats } from "@/lib/content";
+import { about, stats } from "@/lib/content";
+import { EditableIdentityText, useIdentity } from "@/components/identity";
 
 export function About() {
+  const identity = useIdentity();
+
   return (
     <Section id="about" className="py-14 sm:py-20">
       <div className="surface-card px-7 py-10 sm:px-12 sm:py-14">
@@ -31,7 +36,9 @@ export function About() {
       </Reveal>
       <Reveal delay={240}>
         <p className="mt-6 font-script text-4xl text-foreground sm:text-5xl">
-          {owner.name}
+          <EditableIdentityText fieldKey="name">
+            {identity.name}
+          </EditableIdentityText>
         </p>
       </Reveal>
       <div className="mt-10 grid grid-cols-3 gap-5 sm:mt-12 sm:gap-10">
